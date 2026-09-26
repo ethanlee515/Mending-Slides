@@ -4,6 +4,7 @@
 \usepackage[T1]{fontenc}
 \usepackage{microtype}
 \usepackage{amsmath,amssymb}
+\usepackage{booktabs}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{tikz}
@@ -154,8 +155,10 @@
   \mainresult
 \end{frame}
 
-% Insert the technical part of the talk here as it is developed.
-% Keep the detailed recap after it; the outline is in mending-talk-prep.md.
+% Technical part: add further slides here, before the detailed results recap.
+\input{slides/formalization-details}
+
+% Keep the detailed recap after the technical section.
 \input{slides/main-result-recap}
 
 \end{document}

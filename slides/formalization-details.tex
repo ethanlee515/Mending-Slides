@@ -1,0 +1,35 @@
+% Appendix E's physical source-line counts, measured by the paper's
+% scripts/count-interface-excerpts.py. Grouped here for readability.
+\begin{frame}{Formalization details}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.40\textwidth}
+      \textbf{Trust}\par\medskip
+      {\small
+        Rocq kernel / standard library\par
+        MathComp / Analysis\par
+        SSProve semantics\par
+      }
+    \column{0.56\textwidth}
+      \textbf{Audit}\par\smallskip
+      {\small
+      \begin{tabular}{@{}lr@{}}
+        \toprule
+        Specification & Lines \\
+        \midrule
+        Scheme / charts / correctness & 83 \\
+        Gaussian / sampler bridge & 56 \\
+        Security games & 175 \\
+        Flooded construction & 45 \\
+        Concrete reduction & 95 \\
+        Loss / reduction validity & 11 \\
+        Misc. helpers & 259 \\
+        \midrule
+        \textbf{Total} & \textbf{724} \\
+        \bottomrule
+      \end{tabular}\par
+      }
+  \end{columns}
+  \vspace{0.5em}
+  {\footnotesize\color{MendingMuted}
+  \href{https://github.com/ethanlee515/mending}{github.com/ethanlee515/mending}\par}
+\end{frame}
