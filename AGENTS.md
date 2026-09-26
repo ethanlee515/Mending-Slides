@@ -17,6 +17,9 @@ Noise Flooding in Homomorphic Encryption” (arXiv:2608.13846).
   transform preparation sections into notes as their slides are developed.
 - `../group-meeting-2025/` contains a much older talk by the user; use it
   as a historical reference.
+- The main-result layout also references the old QMPC theorem slide deleted
+  in commit `1b686d9` of `https://github.com/ethanlee515/QMPC-SWIA-presentation`;
+  its local adaptation is `diagrams/results.tex`.
 - The slide source is `mending-slides.tex`; recap TikZ diagrams are in
   `diagrams/recap.tex`.
 - Use the existing `Makefile` (`make`) to build the PDF into `build/`.

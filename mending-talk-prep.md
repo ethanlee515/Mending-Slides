@@ -5,9 +5,11 @@ presentation; new members have not. Introduce the recap without assuming that
 previous talk. Speaker notes are maintained here in Markdown alongside the
 LaTeX deck, rather than in a second notes PDF.
 
-The title and recap sections below are speaker notes for implemented frames.
-Sections from **Main Result** onward remain the preparation outline and will
-be turned into speaker notes as we develop those slides. Frame numbers count
+The title, recap, and main-result sections below are speaker notes for
+implemented frames. The intervening technical sections from **Formalization
+details** onward remain a preparation outline, except the drafted final
+results recap. They will be turned into speaker notes as we develop those
+slides. Frame numbers count
 logical slides; overlay stages are listed within their slide. Keep the slides
 visual and sparse; explain the definitions, qualifications, and transitions
 aloud using these notes. Assume no cryptography background.
@@ -206,11 +208,70 @@ Adapted from the old talk’s **The Patch** / **Noise Flooding** explanation and
 this preparation outline’s equation; the old deck has no separate intuition
 frame.
 
+## Pinned for later: masking intuition and parameter cost
+
+Leave the current intuition slide unchanged for now. At this early point,
+say only: wide fresh noise hides the small key-dependent error, costs
+precision, and must protect the entire adaptive interaction. Then get to the
+main result. The detailed width calculation can follow the verified theorem
+or become a backup slide.
+
+- OTP analogy, if useful later: on a finite additive group, adding an
+  independent uniform value makes the answer uniform, independent of the
+  secret-dependent error **and the intended answer**. This gives perfect
+  masking but removes the useful numerical result. There is no uniform
+  probability distribution over all integers or reals; bounded-interval
+  additive noise without modular arithmetic does not give exact OTP masking.
+- Gaussian flooding is a security/precision tradeoff, rather than perfect
+  uniform masking. Defer concrete bit budgets until `q`, `n`, and `gamma`
+  have been introduced.
+- Back-of-envelope calculation from our theorem: to make the additive
+  statistical loss at most `delta`, require
+
+  ```text
+  gamma >= sqrt(q*n) / (2*delta).
+  sigma = max(1, E) * gamma, where E is the public approximation-error bound.
+  ```
+
+  For the particular target `delta = 2^(-lambda)`, this gives
+  `log2(gamma) >= lambda - 1 + (log2(q) + log2(n))/2` for positive `q,n`.
+  This is a derived absolute statistical-loss budget, not automatically the
+  paper’s concrete computational “bits of security” convention. The total
+  bound also includes the base IND-CPA term.
+- TODO before adding numerical examples: locate the LMSS paper’s specific
+  back-of-envelope discussion and check its parameterization and security
+  convention. Do not quote remembered widths as established numbers.
+
 # Main Result
 
-Formally verify the LMSS patch
+**Slide 9 — Main result (two stages)**
 
-Constructed new program logic + compiler combo
+1. The centered card says: “We formally verified the LMSS security reduction
+   using Rocq/SSProve.” Give the headline before starting the technical part.
+2. Reveal the lower callout: a new Pythagorean program logic and a verified
+   compiler make this adaptive security proof checkable.
+
+- Credit the underlying cryptographic reduction to LMSS. Our contribution is
+  the checked reduction, logic, compiler, and required probability analysis.
+- Keep “square-root loss” and “adaptive queries” out of this introductory
+  callout. Explain them in the final recap after the technical section.
+- Do not read the exact security bound here; the final recap now contains it.
+- Transition into the technical part: how do we represent programs and their
+  security properties, and how do the logic and compiler check this proof?
+
+## Pinned: introducing formal verification
+
+We have not introduced formal verification before this headline. Most of the
+target audience probably knows it, so leave the headline as requested for now.
+Revisit whether a one-sentence spoken reminder is needed: the proof is written
+in Rocq and checked by its kernel; SSProve supplies the cryptographic-program
+semantics. The later formalization section can introduce the tools in detail.
+
+Layout reference: the rounded theorem card and progressively revealed callout
+in [the deleted QMPC main-theorem slide](https://github.com/ethanlee515/QMPC-SWIA-presentation/commit/1b686d933aef9aa13a8018f27376160d20521db8),
+recovered from the parent of that deletion commit. The main card is centered
+vertically on the page; its offset callout is below, with a northwest-pointing
+tail that stops outside the card. Adapted in `diagrams/results.tex`.
 
 # Formalization details
 
@@ -329,9 +390,59 @@ Whoops, `A = code`, no extra structure.
 
 # Game "hops"
 
-# Verified main theorem
+# Verified main theorem — Main result, revisited
 
-` Adv[...] <= Adv[...] + ...`
+**Final results recap — after the technical section**
+
+This slide is drafted in `slides/main-result-recap.tex`. It is currently the
+10th logical slide because the intervening technical slides are not drafted
+yet. Insert those after slide 9 and before this recap.
+
+- Return to the result announced earlier, now using the game and program
+  notation introduced during the technical part.
+- Start with the hypotheses: an approximately correct base FHE scheme with a
+  supplied IND-CPA security bound. For every adaptive `q`-query adversary `A`,
+  the checked construction produces the reduction `B_{A,q}`.
+- Read the displayed bound as “the attacker’s winning probability against the
+  flooded scheme is at most the base-encryption bound plus the flooding loss.”
+- `beta_CPA` bounds the reduction’s **winning probability**, not a normalized
+  advantage. Do not silently replace it with an advantage bound or add an
+  extra factor of two.
+- `q` counts decryption queries, `n` is the noise-coordinate dimension, and
+  `gamma > 0` is the flooding-width multiplier. Flooding uses
+  `sigma = max(1, E) * gamma` for public error bound `E`.
+- Connect the result to the tools just explained: conditional KL budgets add
+  in the Pythagorean program logic; the verified trace compiler lifts the
+  local oracle rule to arbitrary adaptive programs; one final conversion to
+  statistical distance gives the square-root loss.
+- An ordinary per-query statistical-distance hybrid bound scales linearly in
+  `q`. Preserving KL until the end gives the parameter-critical square root,
+  matching the paper’s abstract.
+
+Exact statement from the manuscript:
+
+```text
+Pr[IND-CPAD_{NF_gamma[S], q}(A) = 1]
+    <= beta_CPA(B_{A,q}) + sqrt(q * epsilon_nf / 2)
+    <= beta_CPA(B_{A,q}) + sqrt(q*n) / (2*gamma),
+epsilon_nf = n / (2*gamma^2).
+```
+
+The theorem also assumes deterministic base decryption with probability-one
+approximate correctness and the integer-vector noise-coordinate interface.
+Its adversaries are well-typed SSProve oracle programs; polynomial-time
+preservation is a separate metatheoretic audit. This is a conditional reduction
+for an abstract FHE scheme, not an unconditional verification of all of CKKS.
+Keep those precise qualifications available in the spoken explanation.
+
+Sources: `../mending/Pythagorean-RHL/main.tex` (abstract) and
+`../mending/Pythagorean-RHL/construction-security-setting-and-result.tex`
+(“Checked noise-flooding reduction”). Credit LMSS for the underlying reduction
+and the existing square-root composition principle.
+
+After the result, either discuss the pinned noise-width/precision calculation
+or move directly to future directions. Decide once the technical section’s
+length is clear.
 
 # Future directions
 

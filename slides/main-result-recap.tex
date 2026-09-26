@@ -1,0 +1,26 @@
+% Final results recap: keep after the technical section when it is drafted.
+% Source: Pythagorean-RHL/main.tex (abstract) and the checked reduction theorem
+% in construction-security-setting-and-result.tex. beta_CPA is a win bound.
+\begin{frame}{Main result, revisited}
+  \relax
+  {\small Assume an IND-CPA-secure, approximately correct FHE scheme $S$.\par}
+  \medskip
+  {\small For every adaptive $q$-query adversary $\mathcal A$, we construct
+  a reduction $\mathcal B_{\mathcal A,q}$ and prove:\par}
+  \vspace{0.6em}
+  \[
+    \Pr\!\left[
+      \mathsf{IND\text{-}CPAD}_{\mathsf{NF}_{\gamma}[S],q}(\mathcal A)=1
+    \right]
+    \leq
+    \underbrace{\beta_{\mathsf{CPA}}(\mathcal B_{\mathcal A,q})}_{\text{base FHE}}
+    +\underbrace{\frac{\sqrt{qn}}{2\gamma}}_{\text{flooding loss}}.
+  \]
+  \vspace{0.4em}
+  {\small
+    $q$: decryption queries\qquad $n$: noise dimension\par
+    $\gamma>0$: flooding-width multiplier\par
+  }
+  \vspace{0.6em}
+  \takeaway{Accumulate KL budgets; convert once to statistical distance.}
+\end{frame}

@@ -1,0 +1,27 @@
+% Layout reference: QMPC-SWIA-presentation, slides/main-theorem.{html,css},
+% recovered before deletion commit 1b686d9. The theorem box itself is centered
+% on the page; the callout does not participate in its vertical placement.
+\newcommand{\mainresult}{%
+  \begin{tikzpicture}[remember picture,overlay]
+    \node[draw=MendingTeal,line width=1pt,fill=MendingTeal!16,
+      rounded corners=4mm,text=MendingInk,align=center,font=\bfseries,
+      text width=9.8cm,inner sep=4mm,minimum height=1.6cm]
+      (result) at (current page.center) {
+      We formally verified the LMSS security reduction\\
+      using Rocq/SSProve.
+    };
+    \uncover<2->{
+      \node[fill=MendingPale,rounded corners=4mm,text=MendingInk,
+        text width=8.8cm,inner sep=4mm,minimum height=0.9cm]
+        (callout) at ($(result.center)+(1.0,-2.1)$) {};
+      % Aim northwest, stopping just short of the theorem box's border.
+      \path[fill=MendingPale]
+        ($(callout.north)+(-1.55,-0.02)$) --
+        ($(result.south)+(-0.9,-0.06)$) --
+        ($(callout.north)+(-0.75,-0.02)$) -- cycle;
+      \node[font=\bfseries,text=MendingInk] at (callout.center)
+        {New program logic + verified compiler};
+
+    }
+  \end{tikzpicture}%
+}

@@ -7,7 +7,7 @@
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{tikz}
-\usetikzlibrary{arrows.meta}
+\usetikzlibrary{arrows.meta,calc}
 
 % Palette and typography follow quantum-fair-exchange-talk.
 \definecolor{MendingInk}{HTML}{17324D}
@@ -32,6 +32,7 @@
   \end{beamercolorbox}%
 }
 \input{diagrams/recap}
+\input{diagrams/results}
 
 % Source: ../mending/Pythagorean-RHL/main.tex, CameraReady author block.
 \title{Verified Pythagorean Composition for Adaptive Cryptographic Games}
@@ -147,5 +148,14 @@
   \vspace{0.5em}
   \takeaway{Wide noise hides a small key-dependent shift.}
 \end{frame}
+
+% The main-results layout is adapted from the deleted 2021 QMPC theorem slide.
+\begin{frame}{Main result}
+  \mainresult
+\end{frame}
+
+% Insert the technical part of the talk here as it is developed.
+% Keep the detailed recap after it; the outline is in mending-talk-prep.md.
+\input{slides/main-result-recap}
 
 \end{document}
