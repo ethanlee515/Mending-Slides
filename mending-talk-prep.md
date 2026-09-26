@@ -3,13 +3,12 @@
 Group meeting talk for Xiaodi Wu’s group. Some listeners attended the 2025
 presentation; new members have not. Introduce the recap without assuming that
 previous talk. Speaker notes are maintained here in Markdown alongside the
-LaTeX deck, rather than in a second notes PDF.
+LaTeX deck.
 
 The title, recap, and main-result sections below are speaker notes for
 implemented frames, including **Formalization details**. The remaining
 technical sections from **Background: programming language** onward are still
-a preparation outline, except the drafted final results recap. They will be turned into speaker notes as we develop those
-slides. Frame numbers count
+a preparation outline, except the drafted final results recap. They will be turned into speaker notes as we develop those slides. Frame numbers count
 logical slides; overlay stages are listed within their slide. Keep the slides
 visual and sparse; explain the definitions, qualifications, and transitions
 aloud using these notes. Assume no cryptography background.
@@ -50,14 +49,9 @@ Source: [2022 Gödel Prize citation](https://sigact.org/prizes/g%C3%B6del/citati
 
 **Slide 3 — Recap: FHE, what?**
 
-- Walk through the commuting diagram. The upper row is plaintext computation:
-  input `x`, function `f`, output `y`. For exact correctness, `y = f(x)`.
-- Encryption takes us to the lower row. The server evaluates an encrypted
-  counterpart of `f` on the ciphertext. Decryption takes us back to the output.
+- Walk through the commuting diagram.
 - Define hats once: `hat{x}` is an encryption of `x`; `hat{y}` is an encrypted
-  output. Hats are this talk’s convention, not a universal cryptographic
-  notation. Papers often use `c` or `ct` for ciphertexts. The convention is
-  spoken rather than printed on the slide.
+  output.
 - Define `k` as the client’s secret key. Use the simple secret-key interface
   `Enc_k` and `Dec_k`; the server can evaluate without knowing `k`.
 - For this one-round picture, treat public/evaluation helper material as bundled
@@ -69,36 +63,20 @@ Source: [2022 Gödel Prize citation](https://sigact.org/prizes/g%C3%B6del/citati
 - Exact FHE recovers the intended plaintext result. In approximate FHE, such as
   CKKS, we allow a bounded numerical error: `y ≈ f(x)`. Say this aloud; the
   diagram intentionally does not repeat “approximately” on the decryption
-  arrow. The only displayed relation, below the centered diagram, is
-  `y ≈ f(x)`. The error is the focus of this talk.
+  arrow.
 
 **Slide 4 — Recap: FHE, what? — Cloud computing (seven stages)**
 
-1. Establish the client and server.
-2. The client generates its secret key: `k ← KeyGen()`.
-3. The client encrypts `x`, producing `hat{x}`.
-4. The client sends the ciphertext and the computation `f` to the server.
-5. The server evaluates `f` on the ciphertext, producing `hat{y}`.
-6. The server sends `hat{y}` back.
-7. The client decrypts it. Only the client holds the secret key.
-
+Walk through the messages.
 Reinforce that the server does the computation while the client holds `k`.
 The transmitted `hat{x}` implicitly includes the helper material for evaluation,
 created during setup. Key generation happens before encryption and before the
 first message to the server.
-Next ask what changes when a decrypted result is also revealed to someone else.
-
-Redrawn in `diagrams/recap.tex` from **Homomorphic Encryptions** and the six
-**Homomorphic Encryptions and Cloud Computing** frames in
-`../group-meeting-2025/main.tex`, with a separate key-generation stage added.
 
 # Recap: FHE timeline
 
 **Slide 5 — Recap: FHE timeline**
 
-- This redraw covers the historical milestones from last year’s talk, rather
-  than an exhaustive survey of developments through today. Milestone spacing
-  is schematic, not proportional to elapsed years.
 - The FHE question goes back to 1978; Gentry’s first construction appeared in
   2009. The 2011–2012 generation of constructions made major efficiency gains.
   “Efficient constructions” means major theoretical efficiency gains, not that
@@ -129,18 +107,6 @@ and the two 2022 events share one year marker.
   `e(k)` in coral to highlight the secret-key dependence. Explain this aloud
   rather than add a separate error label. This is schematic notation; the
   error also depends on the ciphertext and computation.
-- In the LM threat model, the attacker may choose the plaintext and the
-  computation. For this introductory picture, simply say “knows `x` and `f`”;
-  the input-selection interaction is implicit.
-- One round illustrates the source of leakage. The old second-round arrows
-  did not explain a specific attack algorithm and are omitted here.
-- Do not claim that every CKKS configuration loses its entire key from one
-  released result. The required observations depend on encoding, precision,
-  parameters, and the attack. A known/chosen-input attack need not be adaptive;
-  the later security theorem protects against general adaptive queries.
-- Standard IND-CPA security covers ciphertext observations, not this additional
-  decryption-output interface. The formal result later in the talk uses the
-  stronger IND-CPAD setting.
 
 Technical background, if asked (off-slide): Section 3 of the USENIX paper below
 reconstructs the simplified LM example with plaintext zero and the identity
@@ -149,8 +115,6 @@ function. For a raw ciphertext `(a,b)` with `b = a*s + e`, revealing raw
 `a` is invertible. This omits CKKS encoding/decoding and is an illustrative
 algebraic example, not a universal practical query count.
 
-Redrawn from the old **The LM Attack** frames, reduced to one round with
-explicit known plaintext/function and consistent hat notation.
 Sources: [Li–Micciancio, EUROCRYPT 2021](https://eprint.iacr.org/2020/1533);
 [Guo et al., USENIX Security 2024, Section 3](https://www.usenix.org/system/files/usenixsecurity24-guo-qian_1.pdf).
 
@@ -158,14 +122,9 @@ Sources: [Li–Micciancio, EUROCRYPT 2021](https://eprint.iacr.org/2020/1533);
 
 **Slide 7 — Recap: The LMSS patch construction**
 
-- Here `hat{x}` denotes the ciphertext being decrypted; `x` is its intended
-  plaintext. It can be the evaluated ciphertext previously called `hat{y}`.
 - LMSS = Li, Micciancio, Schultz, and Sorrell. Their defense postprocesses
   approximate decryption with fresh Gaussian noise.
-- Walk through the `Dec'` procedure: it takes the secret key `k` and a
-  ciphertext `hat{x}`, decrypts, samples independent noise, and returns the
-  decrypted value plus that noise. The sampling assignment draws from the
-  Gaussian distribution, rather than copying a deterministic value.
+- Walk through the `Dec'` procedure.
 - Fresh noise, every answer: encryption and evaluation remain unchanged.
 - `DG` denotes a discrete Gaussian; `n` is the plaintext dimension and `sigma`
   is the flooding width. The width must dominate the public bound on the
@@ -203,10 +162,6 @@ Source: [LMSS, CRYPTO 2022](https://eprint.iacr.org/2022/816).
   to previous answers; the security proof must control the accumulated loss.
 - Transition to the main result: we now verify this adaptive composition
   argument using a new program logic and a verified compiler.
-
-Adapted from the old talk’s **The Patch** / **Noise Flooding** explanation and
-this preparation outline’s equation; the old deck has no separate intuition
-frame.
 
 ## Pinned for later: masking intuition and parameter cost
 
@@ -253,9 +208,6 @@ or become a backup slide.
 
 - Credit the underlying cryptographic reduction to LMSS. Our contribution is
   the checked reduction, logic, compiler, and required probability analysis.
-- Keep “square-root loss” and “adaptive queries” out of this introductory
-  callout. Explain them in the final recap after the technical section.
-- Do not read the exact security bound here; the final recap now contains it.
 - Transition into the technical part: how do we represent programs and their
   security properties, and how do the logic and compiler check this proof?
 
