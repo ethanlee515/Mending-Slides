@@ -1,0 +1,68 @@
+\documentclass[aspectratio=169,11pt]{beamer}
+
+\usetheme[progressbar=frametitle,numbering=fraction]{metropolis}
+\usepackage[T1]{fontenc}
+\usepackage{microtype}
+
+% Palette and typography follow quantum-fair-exchange-talk.
+\definecolor{MendingInk}{HTML}{17324D}
+\definecolor{MendingTeal}{HTML}{087E8B}
+\definecolor{MendingPale}{HTML}{E8F3F4}
+\definecolor{MendingGold}{HTML}{E5A23B}
+\definecolor{MendingMuted}{HTML}{5E6D78}
+\setbeamercolor{normal text}{fg=MendingInk,bg=white}
+\setbeamercolor{frametitle}{fg=white,bg=MendingInk}
+\setbeamercolor{progress bar}{fg=MendingTeal,bg=MendingPale}
+\setbeamercolor{progress bar in head/foot}{fg=MendingTeal,bg=MendingPale}
+\setbeamercolor{title separator}{fg=MendingTeal}
+\setbeamercolor{palette primary}{fg=white,bg=MendingInk}
+\setbeamerfont{title}{series=\bfseries,size=\huge}
+\setbeamerfont{frametitle}{series=\bfseries,size=\Large}
+\setbeamertemplate{navigation symbols}{}
+
+% Source: ../mending/Pythagorean-RHL/main.tex, CameraReady author block.
+\title{Verified Pythagorean Composition for Adaptive Cryptographic Games}
+\subtitle{Noise Flooding in Homomorphic Encryption}
+\author[Lee, Cojocaru, Liu, Wu]{%
+  \texorpdfstring{%
+    Yi Lee\textsuperscript{1}\quad
+    Alexandru Cojocaru\textsuperscript{2}\quad
+    Junyi Liu\textsuperscript{1}\quad
+    Xiaodi Wu\textsuperscript{1}%
+  }{Yi Lee, Alexandru Cojocaru, Junyi Liu, Xiaodi Wu}}
+\institute{%
+  \textsuperscript{1}Joint Center for Quantum Information and Computer Science,\\
+  \hspace*{0.7em}University of Maryland, USA\\[0.5em]
+  \textsuperscript{2}School of Informatics, The University of Edinburgh, United Kingdom}
+\date{arXiv:2608.13846}
+\hypersetup{pdftitle={Verified Pythagorean Composition for Adaptive Cryptographic Games: Noise Flooding in Homomorphic Encryption}}
+
+\begin{document}
+
+\begin{frame}[plain]
+  \vfill
+  {\usebeamerfont{title}\color{MendingInk}%
+    Verified Pythagorean Composition\\
+    for Adaptive Cryptographic Games\par}
+  \vspace{0.4em}
+  {\large\color{MendingInk}\insertsubtitle\par}
+  \vspace{0.8em}
+  {\color{MendingTeal}\rule{0.48\textwidth}{1.2pt}\par}
+
+  \vspace{1.2em}
+  {\small\bfseries\insertauthor\par}
+  \vspace{1.0em}
+  \begin{tabular}{@{}c@{\hspace{1.0cm}}c@{}}
+    \includegraphics[width=0.28\textwidth,height=0.85cm,keepaspectratio]
+      {assets/affiliations/umd-title.png} &
+    \includegraphics[width=0.28\textwidth,height=0.85cm,keepaspectratio]
+      {assets/affiliations/edinburgh-title.png} \\[0.5em]
+    {\scriptsize\color{MendingMuted}\textsuperscript{1}QuICS, University of Maryland} &
+    {\scriptsize\color{MendingMuted}\textsuperscript{2}School of Informatics}
+  \end{tabular}
+
+  \vfill
+  {\footnotesize\bfseries\color{MendingGold}\insertdate\par}
+\end{frame}
+
+\end{document}
