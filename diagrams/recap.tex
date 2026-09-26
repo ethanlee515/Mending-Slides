@@ -1,0 +1,87 @@
+% Editable recap diagrams. Explicit bounding boxes keep overlay stages stationary.
+\tikzset{
+  recap flow/.style={-{Latex[length=2.2mm]},thick,draw=MendingTeal},
+  recap leak/.style={-{Latex[length=2.2mm]},thick,draw=MendingCoral},
+  recap life/.style={draw=MendingMuted!60,line width=0.6pt},
+  recap party/.style={font=\small\bfseries,text=MendingInk},
+  recap label/.style={font=\small,text=MendingInk,fill=white,inner sep=2pt},
+  recap value/.style={rounded corners=3pt,fill=MendingPale,
+    minimum width=1.05cm,minimum height=0.65cm,text=MendingInk,font=\large}
+}
+
+\newcommand{\fhecommute}{%
+  \begin{tikzpicture}
+    \path[use as bounding box] (-1.05,-0.5) rectangle (5.05,3.0);
+    \node[recap value] (x) at (0,2.4) {$x$};
+    \node[recap value] (y) at (3.7,2.4) {$y$};
+    \node[recap value] (c) at (0,0) {$\hat{x}$};
+    \node[recap value] (cf) at (3.7,0) {$\hat{y}$};
+    \draw[recap flow] (x) -- node[recap label,above] {$f$} (y);
+    \draw[recap flow] (x) -- node[recap label,left] {$\operatorname{Enc}_{k}$} (c);
+    \draw[recap flow] (c) -- node[recap label,below] {$\operatorname{Eval}(f,\cdot)$} (cf);
+    \draw[recap flow] (cf) -- node[recap label,right]
+      {$\operatorname{Dec}_{k}$} (y);
+  \end{tikzpicture}%
+}
+
+\newcommand{\fhecloud}{%
+  \begin{tikzpicture}
+    \path[use as bounding box] (0,-0.65) rectangle (12,3.75);
+    \node[recap party] at (2,3.5) {Client};
+    \node[recap party] at (10,3.5) {Server};
+    \draw[recap life] (2,3.2) -- (2,-0.55);
+    \draw[recap life] (10,3.2) -- (10,-0.55);
+    \uncover<2->{\node[recap label,anchor=west] at (2.2,2.9)
+      {$k\gets\operatorname{KeyGen}()$};}
+    \uncover<3->{\node[recap label,anchor=west] at (2.2,2.35)
+      {$\hat{x}\gets\operatorname{Enc}_{k}(x)$};}
+    \uncover<4->{\draw[recap flow] (2,1.7) --
+      node[recap label,above] {$\hat{x},\ f$} (10,1.7);}
+    \uncover<5->{\node[recap label,anchor=east] at (9.8,1.05)
+      {$\hat{y}\gets\operatorname{Eval}(f,\hat{x})$};}
+    \uncover<6->{\draw[recap flow] (10,0.4) --
+      node[recap label,above] {$\hat{y}$} (2,0.4);}
+    \uncover<7->{\node[recap label,anchor=west] at (2.2,-0.25)
+      {$y\gets\operatorname{Dec}_{k}(\hat{y})$};}
+  \end{tikzpicture}%
+}
+
+\newcommand{\fhetimeline}{%
+  \begin{tikzpicture}
+    \path[use as bounding box] (-0.25,-1.25) rectangle (12.35,1.7);
+    \draw[recap flow,draw=MendingInk] (-0.1,0) -- (12.3,0);
+    % This is a milestone schematic: positions are not proportional to years.
+    \foreach \x/\year in {0.5/1978,2.7/2009,4.9/{2011--12},7.1/2017,9.3/2021,11.5/2022} {
+      \draw[thick,MendingInk] (\x,-0.12) -- (\x,0.12);
+      \node[font=\small\bfseries,text=MendingInk,below] at (\x,-0.18) {\year};
+    }
+    \node[recap label,align=center,above] at (0.5,0.35) {FHE\\question};
+    \node[recap label,align=center,above] at (2.7,0.35) {First FHE\\construction};
+    \node[recap label,align=center,above] at (4.9,0.35) {Efficient\\constructions};
+    \node[recap label,align=center,above] at (7.1,0.35) {Approximate\\FHE (CKKS)};
+    \node[recap label,align=center,above,text=MendingCoral] at (9.3,0.35) {LM\\attack};
+    \node[recap label,align=center,above,text=MendingTeal] at (11.5,0.35) {LMSS\\defense};
+    \node[font=\scriptsize,text=MendingMuted,below,align=center] at (11.5,-0.65)
+      {G\"odel Prize};
+  \end{tikzpicture}%
+}
+
+\newcommand{\lmattack}{%
+  \begin{tikzpicture}
+    \path[use as bounding box] (-0.75,0.25) rectangle (5.4,4.0);
+    \node[recap party,text=MendingCoral] at (0,3.75) {Attacker};
+    \node[recap party] at (2.4,3.75) {Client};
+    \node[recap party] at (4.8,3.75) {Server};
+    \foreach \x in {0,2.4,4.8} {\draw[recap life] (\x,3.4) -- (\x,0.45);}
+    \node[font=\scriptsize,text=MendingCoral,fill=white,inner sep=2pt]
+      at (0,3.1) {knows $x,f$};
+    \uncover<2->{\draw[recap flow] (2.4,2.9) --
+      node[recap label,above] {$\hat{x},\ f$} (4.8,2.9);}
+    \uncover<3->{\draw[recap flow] (4.8,2.05) --
+      node[recap label,above] {$\hat{y}$} (2.4,2.05);}
+    \uncover<4->{\draw[recap leak] (2.4,1.15) --
+      node[recap label,above,text=MendingCoral] {$y$} (0,1.15);
+      \node[font=\scriptsize,text=MendingCoral,align=center] at (1.2,0.65)
+        {decrypted answer};}
+  \end{tikzpicture}%
+}

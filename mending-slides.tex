@@ -3,6 +3,11 @@
 \usetheme[progressbar=frametitle,numbering=fraction]{metropolis}
 \usepackage[T1]{fontenc}
 \usepackage{microtype}
+\usepackage{amsmath,amssymb}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
 
 % Palette and typography follow quantum-fair-exchange-talk.
 \definecolor{MendingInk}{HTML}{17324D}
@@ -10,6 +15,7 @@
 \definecolor{MendingPale}{HTML}{E8F3F4}
 \definecolor{MendingGold}{HTML}{E5A23B}
 \definecolor{MendingMuted}{HTML}{5E6D78}
+\definecolor{MendingCoral}{HTML}{C85151}
 \setbeamercolor{normal text}{fg=MendingInk,bg=white}
 \setbeamercolor{frametitle}{fg=white,bg=MendingInk}
 \setbeamercolor{progress bar}{fg=MendingTeal,bg=MendingPale}
@@ -19,6 +25,13 @@
 \setbeamerfont{title}{series=\bfseries,size=\huge}
 \setbeamerfont{frametitle}{series=\bfseries,size=\Large}
 \setbeamertemplate{navigation symbols}{}
+\setbeamercolor{takeaway}{fg=MendingInk,bg=MendingPale}
+\newcommand{\takeaway}[1]{%
+  \begin{beamercolorbox}[wd=\textwidth,sep=0.85ex,rounded=true,center]{takeaway}
+    #1
+  \end{beamercolorbox}%
+}
+\input{diagrams/recap}
 
 % Source: ../mending/Pythagorean-RHL/main.tex, CameraReady author block.
 \title{Verified Pythagorean Composition for Adaptive Cryptographic Games}
@@ -63,6 +76,76 @@
 
   \vfill
   {\footnotesize\bfseries\color{MendingGold}\insertdate\par}
+\end{frame}
+
+
+% Recap ported from ../group-meeting-2025/main.tex.
+% Speaker notes and source links live in mending-talk-prep.md.
+
+\begin{frame}{Recap: FHE, why?}
+  \relax
+  {\Large\bfseries Compute on encrypted data.\par}
+  \vspace{1.5em}
+  \begin{itemize}
+    \item G\"odel Prize, 2022
+    \item Lattice-based; conjectured quantum resistant
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Recap: FHE, what?}
+  \begin{center}
+    \fhecommute
+    \par\vspace{0.5em}
+    {\large $y\approx f(x)$\par}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Recap: FHE, what? --- Cloud computing}
+  \begin{center}
+    \fhecloud
+  \end{center}
+\end{frame}
+
+\begin{frame}{Recap: FHE timeline}
+  \begin{center}
+    \fhetimeline
+  \end{center}
+\end{frame}
+
+\begin{frame}{Recap: The LM Attack}
+  \begin{center}
+    \lmattack
+    \par\vspace{0.5em}
+    {\large $y=f(x)+\textcolor{MendingCoral}{e(k)}$\par}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Recap: The LMSS patch construction}
+  \begin{center}
+    \begin{minipage}{0.78\textwidth}
+      \begin{algorithm}[H]
+        \caption{Noise-flooded decryption}
+        \begin{algorithmic}
+          \Procedure{$\operatorname{Dec}'$}{$k,\hat{x}$}
+            \State $y\gets\operatorname{Dec}_{k}(\hat{x})$
+            \State $e'\gets\mathcal{DG}^{n}_{\sigma}$
+            \State \Return $y+e'$
+          \EndProcedure
+        \end{algorithmic}
+      \end{algorithm}
+    \end{minipage}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Recap: The LMSS patch intuition}
+  \begin{align*}
+    \operatorname{Dec}'_{k}(\hat{x})
+      &= \operatorname{Dec}_{k}(\hat{x})+e' \\
+      &= x+e(k)+e' \\
+      &\approx_{\mathrm{dist}} x+e'.
+  \end{align*}
+  \vspace{0.5em}
+  \takeaway{Wide noise hides a small key-dependent shift.}
 \end{frame}
 
 \end{document}
