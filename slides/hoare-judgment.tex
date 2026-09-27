@@ -1,0 +1,17 @@
+\begin{frame}{Preconditions and postconditions}
+  A judgment is a claim about a program.
+  \[
+    \vDash\mathsf{Hoare}\{\mathsf{Pre}\}\;c\;\{\mathsf{Post}\}
+  \]
+  \begin{center}
+    If $\mathsf{Pre}$ holds before, $\mathsf{Post}$ holds after.
+  \end{center}
+  \vspace{1em}
+  \[
+    \vDash\mathsf{Hoare}\{\mathsf{true}\}\;
+      \texttt{roll()}\;\{r>0\}
+  \]
+  \begin{center}
+    No initial assumptions; every possible return is positive.
+  \end{center}
+\end{frame}

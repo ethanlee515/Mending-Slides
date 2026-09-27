@@ -1,0 +1,21 @@
+\begin{frame}{Data processing inequality}
+  \setbeamertemplate{blocks}[rounded][shadow=false]
+  \setbeamercolor{block title}{fg=white,bg=MendingTeal}
+  \setbeamercolor{block body}{fg=MendingInk,bg=MendingPale}
+  \begin{theorem}[Data processing inequality]
+    Let $X,Y,Z$ be sets, and let
+    \[
+      D,D' : X\longrightarrow\mathsf{distr}(Y),
+      \qquad P : Y\longrightarrow\mathsf{distr}(Z).
+    \]
+    For every $x\in X$, we have
+    \[
+      \bigl\|(P\circ D)(x)-(P\circ D')(x)\bigr\|_1
+        \leq \bigl\|D(x)-D'(x)\bigr\|_1.
+    \]
+  \end{theorem}
+  \vspace{0.7em}
+  \begin{center}
+    {\large What if $D$, $D'$, and $P$ are programs?}
+  \end{center}
+\end{frame}

@@ -441,21 +441,82 @@ Transition: these before/after assertions are what a judgment records. Our
 security proof will compare two programs, so we will need relational judgments
 too.
 
+# Background: Preconditions and postconditions
+
+**Slide 16 — Preconditions and postconditions**
+
+Package the previous walkthrough as one claim. The first braces give the
+starting condition, the second the guarantee about the return value and final
+memory. `true` means no restriction on initial memory. Read the turnstile as
+“the judgment holds”; these are mathematical propositions, not runtime checks.
+
+For `roll`, all samples are positive and it does not fail. In the repository,
+Hoare guarantees the postcondition on the support of successful outputs;
+it does not itself prove termination or full mass. Keep that distinction
+off-slide unless asked.
+
 # Background: Program logic warm-up
 
-Theorem: Data processing inequality.
+**Slide 17 — Data processing inequality**
 
-Let $X, Y, R$ be sets, and $D(x), D'(x) : X -> distr(Y), P(y): Y -> distr(R)$ be random functions.
-For all $x in X$, we have
-$$\norm{(P \circ D)(x) - (P \circ D')(x)}_1 <\norm{D(x) - D'(x)}_1$$
+Composition means: sample `y` from `D(x)`, then sample the output from `P(y)`.
+The result is a mixture over the intermediate value, not ordinary composition
+of deterministic functions. The output type of the first stage matches the
+input type of the second. The same `P` is applied on both sides. Use `≤`, not
+strict `<`: identity postprocessing can preserve the distance exactly.
 
-Now, what if $D$, $D'$, and $R$ are all programs?
+Work with discrete distributions here; the norm is the sum of absolute mass
+differences (twice total variation). No proof is needed unless asked.
+Postprocessing cannot make the two distributions easier to distinguish.
+
+The question sets up relational reasoning: run two programs and compare their
+behavior. The semantics makes a program into the appropriate distribution-valued
+function, and sampling/sequencing gives the same kind of composition.
+For stateful programs, thread the entire memory as well as the returned value;
+a continuation can inspect the memory, so a result-only marginal is not enough.
+In SSProve, calls also require matching interfaces and linking. Do not imply
+that any two pieces of code can simply be composed regardless of types or
+interfaces. We can leave that machinery implicit and use the compatible-program
+picture for this talk.
+
+Transition: package these semantic comparisons into relational judgments, so
+we can prove them one program fragment at a time.
 
 # Background: (Relational) judgments
 
-* Judgments = properties of programs.
-* i.e. pre/post-conditions.
-* We write...
+**Slide 18 — Relational judgments: additive error**
+
+We used assertions about one program. Now the precondition relates two initial
+inputs/memories and the postcondition relates two final outcomes. A coupling
+means choosing correlated outputs while preserving each program’s own output
+distribution. We ask for one that makes the postcondition true except with
+probability at most `ε`. This is an existential choice for the proof; the two
+actual programs do not need to communicate or share runtime randomness.
+
+`ρ` is an input/memory configuration. For this introduction, assume the
+programs do not fail and their semantics has full mass. Say this once in words;
+then omit completion notation on the slide. This is the full-mass special case
+of the repository’s AE judgment, not a changed definition.
+
+If asked: general AE completes missing mass with a failure outcome `⊥`.
+`AE_raw` still uses that completed judgment, but lifts the ordinary postcondition
+to hold only when both outputs are successful. Failure on either side counts
+against the error budget, even simultaneous failure, so raw AE does not remove
+the issue. We postpone this bookkeeping rather than introducing it here.
+
+Bridge back to data processing: with equal starting configurations and equality
+of final outcomes, this is exactly a TVD bound on the two output distributions. A coupling
+with disagreement at most `ε` implies TVD at most `ε`; conversely a maximal
+coupling achieves the TVD for these discrete distributions. Equality of the
+full outcomes includes final memory. If we compare just returned
+values, use their projections; that gives a
+bound on the return distributions rather than on the whole memory state.
+The earlier L1 distance is twice TVD.
+
+The general pre/postconditions let us maintain relationships between different
+memories and intermediate values. This is why the judgment supports stepping
+through and composing program fragments, rather than only comparing final
+answer distributions.
 
 # Backgrond: The `seq` rule as example
 

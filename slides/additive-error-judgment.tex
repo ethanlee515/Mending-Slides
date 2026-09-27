@@ -1,0 +1,24 @@
+% Full-mass specialization of additiveErrorJudgment, ProgramLogics/Ae.v:57-69.
+\begin{frame}{Relational judgments: additive error}
+  \[
+    \vDash\mathsf{AE}\{\mathsf{Pre}\}\;
+      c_L\approx_{\varepsilon}c_R\;\{\mathsf{Post}\}
+      \qquad(\varepsilon\geq0)
+  \]
+  \medskip
+  For every initial pair $(\rho_L,\rho_R)$ satisfying $\mathsf{Pre}$:
+  \[
+    \exists\pi\in\mathsf{Coupl}(\mu_L,\mu_R),\qquad
+    \Pr_{(o_L,o_R)\sim\pi}
+      [\mathsf{Post}(o_L,o_R)]\geq1-\varepsilon.
+  \]
+  {\small
+    $\mu_i=[\![c_i]\!](\rho_i)$:
+    outputs and final memory.\par
+    \medskip
+    Coupling: a joint distribution with the correct marginals.\par
+  }
+  \vspace{1em}
+  \takeaway{Equality postcondition $o_L=o_R$:
+    $\mathsf{TVD}(\mu_L,\mu_R)\leq\varepsilon$.}
+\end{frame}
