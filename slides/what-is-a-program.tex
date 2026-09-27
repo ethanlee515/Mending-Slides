@@ -1,0 +1,25 @@
+\begin{frame}{What is a program?}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.18\textwidth}
+      \textbf{A string?}\par\medskip
+      {\small Text to parse.\par}
+    \column{0.49\textwidth}
+      \textbf{A function?}\par\medskip
+      {\small\texttt{def f(x: X) -> Y}\par}
+      \medskip
+      {\small
+        $\quad\mapsto\;\mathsf{Fun}\bigl(X\times\mathsf{Mem},\,
+          \mathsf{distr}(Y\times\mathsf{Mem})\bigr)$\par
+      }
+    \column{0.27\textwidth}
+      \textbf{A tree?}\par\medskip
+      {\small Abstract syntax tree.\par
+        \medskip Remember compilers class?\par}
+  \end{columns}
+  \vspace{1.3em}
+  \takeaway{Our view: a program is an abstract syntax tree.}
+  \vspace{0.8em}
+  \begin{center}
+    {\small Syntax $c$ \quad$\longmapsto$\quad Semantics $[\![c]\!]$}
+  \end{center}
+\end{frame}

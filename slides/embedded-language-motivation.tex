@@ -1,0 +1,29 @@
+\begin{frame}[fragile]{Why \emph{program} logic}
+  \begin{columns}[c,onlytextwidth]
+    \column{0.43\textwidth}
+      Consider this program:\par
+      \begin{lstlisting}[language=Python,basicstyle=\ttfamily\small,
+        keywordstyle=\color{MendingTeal}\bfseries,columns=fullflexible,
+        keepspaces=true,showstringspaces=false]
+a = b = -1
+
+def roll():
+    global a, b
+    a = randint(1, 6)
+    b = randint(1, 6)
+    r = a + b
+    return r
+      \end{lstlisting}
+    \column{0.53\textwidth}
+      Can we write this as a pure\par
+      Rocq / Lean function?\par
+      \vspace{0.7em}
+      \textbf{No.}\par
+      \begin{itemize}
+        \item Overwriting global variables
+        \item Random integers
+      \end{itemize}
+  \end{columns}
+  \vspace{1.1em}
+  \takeaway{Solution: an \emph{embedded} language.}
+\end{frame}

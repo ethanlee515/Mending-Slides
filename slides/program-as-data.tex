@@ -1,0 +1,38 @@
+% Schematic Python-body AST; not SSProve's exact continuation-based syntax.
+\begin{frame}{The dice program as a tree}
+  \begin{center}
+    \begin{tikzpicture}[
+      syntax/.style={draw=MendingTeal,fill=MendingPale,rounded corners,
+        inner sep=4pt,font=\small},
+      edge/.style={thick,MendingInk}]
+      \node[syntax] (seq) at (4.5,0) {Sequence};
+      \node[syntax] (aa) at (0,-0.9) {Assign $a$};
+      \node[syntax] (ab) at (3,-0.9) {Assign $b$};
+      \node[syntax] (ar) at (6,-0.9) {Assign $r$};
+      \node[syntax] (ret) at (9,-0.9) {Return};
+      \node[syntax] (ra) at (0,-1.8) {\texttt{randint(1, 6)}};
+      \node[syntax] (rb) at (3,-1.8) {\texttt{randint(1, 6)}};
+      \node[syntax] (plus) at (6,-1.8) {$+$};
+      \node[syntax] (a) at (5.4,-2.6) {$a$};
+      \node[syntax] (b) at (6.6,-2.6) {$b$};
+      \node[syntax] (r) at (9,-1.8) {$r$};
+      \foreach \child in {aa,ab,ar,ret}
+        \draw[edge] (seq) -- (\child);
+      \draw[edge] (aa) -- (ra);
+      \draw[edge] (ab) -- (rb);
+      \draw[edge] (ar) -- (plus);
+      \draw[edge] (plus) -- (a);
+      \draw[edge] (plus) -- (b);
+      \draw[edge] (ret) -- (r);
+      \node[draw=MendingMuted,rounded corners,inner sep=8pt,
+        fit=(seq)(aa)(ra)(r)(ret)(a)(b)] (program) {};
+      \node[anchor=south east,font=\small] at (program.north east) {Syntax $c$};
+      \node[align=center] (meaning) at ($(program.south)+(0,-1.3)$)
+        {$[\![c]\!](a_{\mathrm{in}},b_{\mathrm{in}})
+          = (r,(a_{\mathrm{out}},b_{\mathrm{out}}))
+          \in\mathsf{distr}(\mathbb{N}\times\mathsf{Mem})$};
+      \draw[-{Latex[length=2mm]},thick,MendingInk]
+        (program.south) -- node[right,font=\small] {interpret} (meaning.north);
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
