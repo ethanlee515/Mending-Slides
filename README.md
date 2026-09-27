@@ -36,3 +36,7 @@ Reproduce the measurement with
 `python3 ../mending/Pythagorean-RHL/scripts/count-interface-excerpts.py`.
 The paper's Makefile regenerates its full table during the manuscript build;
 the slide keeps a grouped local copy so this deck builds independently.
+
+The infinitude-of-primes Lean demo from `slides/itp-background.tex` is restored
+in [lean-demo/InfinitelyManyPrimes.lean](lean-demo/InfinitelyManyPrimes.lean).
+See [lean-demo/README.md](lean-demo/README.md) for setup and presentation instructions.
