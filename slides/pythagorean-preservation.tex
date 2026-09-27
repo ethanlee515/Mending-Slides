@@ -1,0 +1,25 @@
+% Appendix D, Pythagorean probability preservation; KL/Pyth.v.
+\begin{frame}{Pythagorean preservation}
+  \setbeamertemplate{blocks}[rounded][shadow=false]
+  \setbeamercolor{block title}{fg=white,bg=MendingTeal}
+  \setbeamercolor{block body}{fg=MendingInk,bg=MendingPale}
+  \begin{lemma}[Pythagorean preservation]
+    Let $\mathcal P,\mathcal Q\in\mathsf{distr}(X^n)$ have weight one,
+    and let $s_1,\ldots,s_n\geq0$.
+    For every coordinate $i$ and prefix $a\in X^{i-1}$, suppose the
+    conditional KL divergence is finite and
+    \[
+      D_{\mathrm{KL}}(\mathcal P_i\mid a\;\|\;\mathcal Q_i\mid a)
+        \leq s_i.
+    \]
+    Then
+    \[
+      \|\mathcal P-\mathcal Q\|_1
+        \leq\sqrt{2\sum_{i=1}^{n}s_i}.
+    \]
+  \end{lemma}
+  \vspace{0.5em}
+  \begin{center}
+    How do we express this in a program logic?
+  \end{center}
+\end{frame}

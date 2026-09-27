@@ -485,9 +485,21 @@ Hoare guarantees the postcondition on the support of successful outputs;
 it does not itself prove termination or full mass. Keep that distinction
 off-slide unless asked.
 
+# Background: Sequencing — Hoare
+
+**Slide 21 — Sequencing: Hoare logic**
+
+Read the rule from top to bottom: prove the two premises to obtain the
+conclusion below the bar. `Mid` is the interface between the proofs: the
+first part establishes exactly the condition the continuation needs.
+`y ← c; k(y)` samples the result of `c` and feeds it to `k`, carrying memory
+through too. The second premise holds for every intermediate value/memory
+satisfying `Mid`. Input arguments are suppressed in this schematic notation.
+Connect this to keeping `a > 0` while sampling `b` in our walkthrough.
+
 # Background: Program logic warm-up
 
-**Slide 21 — Data processing inequality**
+**Slide 22 — Data processing inequality**
 
 Composition means: sample `y` from `D(x)`, then sample the output from `P(y)`.
 The result is a mixture over the intermediate value, not ordinary composition
@@ -514,7 +526,7 @@ we can prove them one program fragment at a time.
 
 # Background: (Relational) judgments
 
-**Slide 22 — Relational judgments: additive error**
+**Slide 23 — Relational judgments: additive error**
 
 We used assertions about one program. Now the precondition relates two initial
 inputs/memories and the postcondition relates two final outcomes. A coupling
@@ -541,34 +553,123 @@ coupling achieves the TVD for these discrete distributions. Equality of the
 full outcomes includes final memory. If we compare just returned
 values, use their projections; that gives a
 bound on the return distributions rather than on the whole memory state.
-The earlier L1 distance is twice TVD.
+The slides use L1 distance consistently: it is twice TVD, so the equality
+postcondition yields `||μ_L - μ_R||₁ ≤ 2ε`. The AE error itself remains `ε`.
 
 The general pre/postconditions let us maintain relationships between different
 memories and intermediate values. This is why the judgment supports stepping
 through and composing program fragments, rather than only comparing final
 answer distributions.
 
-# Backgrond: The `seq` rule as example
+# Background: Sequencing — additive error
 
-TODO
+**Slide 24 — Sequencing: additive error**
 
-# Pythagorean Preservation of MW
+Same structure, now comparing two executions. `Mid` relates the intermediate
+values and memories, so the continuation proofs apply to the coupled outputs.
+The first coupling can miss `Mid` with probability at most `ε₁`; when `Mid`
+holds, the continuation coupling can miss `Post` with probability at most
+`ε₂`. Combining the couplings gives error at most `ε₁ + ε₂`.
 
-Thm. TODO
+Keep the full-mass/no-failure picture from the AE introduction. The actual
+`additiveErrorSeqRule` uses `AE_raw` for its first premise, ensuring that failure
+cannot be a successful intermediate outcome fed to a continuation; the second
+premise and conclusion use completed AE. No need to expose that bookkeeping
+on this slide.
 
-Central question: How to capture this in a program logic?
+Transition: ordinary additive-error sequencing pays by adding errors at each
+step. Our later judgment retains KL information so we can convert once at
+the end instead.
+
+# Pythagorean preservation
+
+**Slide 25 — Pythagorean preservation**
+
+Read the coordinates as steps in a transcript, and `a` as the entire history
+before the current step. Both distributions are conditioned on the same
+history. This is a bound on conditional KL, not merely on unconditional
+coordinate marginals; the coordinates need not be independent.
+
+The chain rule adds those KL costs, and Pinsker converts the sum once to
+L1 distance: `||P-Q||₁ ≤ sqrt(2 sum_i s_i)`. This is twice the paper’s TVD
+bound; the underlying result and security-loss constants are unchanged.
+Data processing also bounds the final-coordinate marginal by the same quantity.
+This is the probability lemma behind the better composition rate: contrast
+one square root of the sum with adding a square root at each step.
+
+Finite KL includes absolute continuity and summability in our discrete
+formalization; history-zero cases have a formal conditioning convention.
+No need to develop that technical machinery aloud unless asked. The bound
+uses natural logarithms.
+
+Now ask how to capture this transcript structure and these conditional costs
+inside a judgment for SSProve programs.
 
 # Our `Pyth` judgment
 
-TODO
+**Slide 26 — Our Pythagorean judgment (five stages)**
 
-# Our sequence rules
+The judgment packages the hypotheses of the probability lemma as a property
+of two programs. The final transcript marginals are the actual program
+outputs. Each coordinate has a conditional KL budget; these costs remain a
+vector instead of being immediately converted to a distance.
 
-TODO
+Unlike AE’s relational postcondition, `Post` here is a common unary invariant:
+it holds on every successful output of either program. `Pre` still relates
+the two initial configurations. This invariant supplies facts needed by later
+program fragments. Explain that difference briefly rather than implying the
+two judgments have identical postcondition types.
+
+These transcripts are mathematical witnesses, not necessarily the literal
+list of syntactic sampling sites. A whole fragment can occupy one coordinate;
+the sequence rule will concatenate witnesses. We retain the no-failure picture
+here. The formal definition uses completed, encoded output/heap states and
+checks `Post` on the support of successful outputs.
+
+Reveal the judgment/cost vector first, then the transcript witnesses, then
+the final-marginal identities, then the conditional KL bound, then the common
+postcondition. Pause to explain each piece before advancing.
+
+`finiteKL` is omitted from the slide, not from the definition. It carries the
+absolute-continuity and summability requirements of the probability lemma.
+We are expressing the required hypotheses, not assuming a new trusted rule.
 
 # Our Micciancio-Walter Rule
 
-TODO
+**Slide 27 — From KL budgets to additive error**
+
+This is what the new judgment buys us: the probability lemma bounds the final
+output distance, and maximal coupling gives an AE equality judgment. `Post`
+is the common invariant from Pyth; the conclusion guarantees equality except
+with probability at most `sqrt(||s||₁/2)`.
+
+This error is a disagreement probability, so the constant is still `/2` even
+though the previous probability slide displays L1 distance. The equivalent
+L1 bound is `sqrt(2||s||₁)`. No normalization change to the AE judgment.
+
+Next: how do we build the vector of KL budgets without paying a square root
+at every step? Show the main sequencing rule.
+
+# Our sequence rules
+
+**Slide 28 — Sequencing: Pythagorean budgets**
+
+Use the familiar two-premise shape. The intermediate postcondition here is a
+common unary invariant. `Mid⁼` in the continuation premise requires identical
+intermediate values and memory satisfying that invariant. This is not a claim
+that the two prefix runs necessarily produce equal outputs: the continuation
+comparison is required for each common history, as in the conditional KL lemma.
+
+`++` concatenates the witness transcripts and their KL budget vectors. We do
+not add square roots during composition. After composing all fragments,
+Micciancio–Walter converts the sum of KL costs once to an AE error.
+
+The other named sequencing lemmas in `Pyth.v` are `pythAeSeqRule` (a shared
+continuation), `pythHoareSeqRule` (a shared prefix), and
+`pythClosedHoareSeqRule` (the closed-program prefix wrapper). That is four
+named lemmas in this file, not a count of every sequencing-related result
+throughout the repository. Mention shared code as zero-cost coordinates when
+we need it, rather than showing all these statements now.
 
 # Putting everything together
 

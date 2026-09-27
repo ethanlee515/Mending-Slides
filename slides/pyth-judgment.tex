@@ -1,0 +1,28 @@
+% Full-mass picture of pythJudgment; finiteKL side conditions are explained in notes.
+\begin{frame}{Our Pythagorean judgment}
+  \[
+    \vDash_{\mathsf{Pyth}}\{\mathsf{Pre}\}\;
+      c_L\approx_s c_R\;\{\mathsf{Post}\}
+  \]
+  {\small $s=(s_1,\ldots,s_n)$, with $n\geq1$ and $s_i\geq0$.\par}
+  \medskip
+  \uncover<2->{%
+    For any initial pair satisfying $\mathsf{Pre}$, choose full
+    $n$-step transcripts $\mathcal P,\mathcal Q$.\par
+  }
+  \uncover<3->{%
+    \[
+      \mathcal P_n=[\![c_L]\!](\rho_L),\qquad
+      \mathcal Q_n=[\![c_R]\!](\rho_R).
+    \]
+  }
+  \uncover<4->{%
+    For every coordinate $i$ and prefix $a$:
+    \[
+      D_{\mathrm{KL}}(\mathcal P_i\mid a\;\|\;\mathcal Q_i\mid a)\leq s_i.
+    \]
+  }
+  \uncover<5->{%
+    $\mathsf{Post}$ holds on every possible output of either program.\par
+  }
+\end{frame}

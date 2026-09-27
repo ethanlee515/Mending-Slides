@@ -1,7 +1,7 @@
 % Full-mass specialization of additiveErrorJudgment, ProgramLogics/Ae.v:57-69.
 \begin{frame}{Relational judgments: additive error}
   \[
-    \vDash\mathsf{AE}\{\mathsf{Pre}\}\;
+    \vDash_{\mathsf{AE}}\{\mathsf{Pre}\}\;
       c_L\approx_{\varepsilon}c_R\;\{\mathsf{Post}\}
       \qquad(\varepsilon\geq0)
   \]
@@ -20,5 +20,5 @@
   }
   \vspace{1em}
   \takeaway{Equality postcondition $o_L=o_R$:
-    $\mathsf{TVD}(\mu_L,\mu_R)\leq\varepsilon$.}
+    $\|\mu_L-\mu_R\|_1\leq2\varepsilon$.}
 \end{frame}
