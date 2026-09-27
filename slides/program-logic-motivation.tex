@@ -1,0 +1,19 @@
+\begin{frame}{From obvious to proved}
+  \textbf{Goal:} \texttt{roll()} always returns $r>0$.\par
+  \vspace{0.6em}
+  \begin{center}
+    \small
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{@{}l@{\hspace{1.2cm}}l@{}}
+      \textbf{Code} & \textbf{What we know} \\
+      Before the call & No assumptions \\
+      \texttt{a = randint(1, 6)} & \textcolor{MendingTeal}{$a>0$} \\
+      \texttt{b = randint(1, 6)} & \textcolor{MendingTeal}{$a>0\;\land\;b>0$} \\
+      \texttt{r = a + b} & \textcolor{MendingTeal}{$a>0\;\land\;b>0\;\land\;r=a+b$} \\
+      & \textcolor{MendingTeal}{$r>0$} \quad{\scriptsize (consequence)} \\
+      \texttt{return r} & \textcolor{MendingTeal}{$r>0$} \\
+    \end{tabular}
+  \end{center}
+  \vspace{0.3em}
+  \takeaway{Program logic: prove each step, then compose.}
+\end{frame}

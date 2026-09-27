@@ -412,22 +412,34 @@ of instructions as data.
 
 # Background: Why program logic
 
-Goal:
-```py
-r = f()
-assert r > 0
-```
+**Slide 15 — From obvious to proved**
 
-Proof:
-```py
-x = randInt(1, 6)
-assert x > 0
-y = randInt(1, 6)
-assert x > 0 and y > 0
-r = x + y
-assert x > 0 and y > 0 and r = x + y
-assert r > 0
-```
+Ask why the returned value is positive. It is obvious, but if asked to prove
+it, we would explain what each line establishes and what remains true from
+earlier lines. Step through the table. The second assignment changes `b`,
+not `a`: retaining the earlier fact matters just as much as learning the new
+one. We start with no assumptions about the initial memory. Positivity comes
+from the samples, regardless of what was stored before the call.
+
+After assigning `r`, first establish `a > 0 and b > 0 and r = a + b`.
+Then weaken this to `r > 0`, without executing another instruction: this is
+the rule of consequence (`conseq` in EasyCrypt).
+
+The right column contains logical assertions, not additional runtime checks.
+For the dice sampler, positivity holds on its entire support; “always” here
+means with probability one. The table suppresses the function declaration and
+`global a, b` boilerplate from the earlier example.
+
+Program logic makes this reasoning precise: each instruction has a rule, and
+sequencing combines the local facts into a property of the whole program.
+The rules are proved against the program semantics. Rocq checks the argument;
+we do not have to manually expand the whole distribution every time. Calling
+it pedantic is a useful intuition, but the value is modular reasoning, not
+merely more verbose code execution.
+
+Transition: these before/after assertions are what a judgment records. Our
+security proof will compare two programs, so we will need relational judgments
+too.
 
 # Background: Program logic warm-up
 
