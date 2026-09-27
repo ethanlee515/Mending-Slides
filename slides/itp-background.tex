@@ -1,0 +1,94 @@
+% Ported from ethanlee515/Lean-QEC-Talk, itp-background.tex.
+% Source revision: 41c6457af660b27f07317002c1462ecdff8c7e87.
+% Both frames share geometry and a fixed bounding box, so annotations cannot rescale it.
+\newcommand{\itpbackgrounddiagram}[1]{%
+  \resizebox{!}{4.7cm}{%
+  \begin{tikzpicture}[
+    >=Latex,
+    prooficon/.style={align=center,inner sep=0pt},
+    proofname/.style={font=\small\ttfamily},
+    compile/.style={->,very thick,MendingTeal},
+    compilelabel/.style={font=\small,fill=white,inner sep=2pt},
+    badproof/.style={rectangle callout,draw=MendingCoral,thick,
+      rounded corners=4pt,fill=white,align=center,font=\small,
+      inner xsep=7pt,inner ysep=5pt}
+  ]
+    \node[prooficon] (tex) at (-2.45,1.35)
+      {\includegraphics[height=1.05cm]{assets/itp/txt-file-icon-1215.png}};
+    \node[proofname,below=0.18cm of tex] {proof.tex};
+    \node[prooficon] (pdf) at (2.45,1.35)
+      {\includegraphics[height=1.05cm]{assets/itp/chrome-logo-m100.png}};
+    \node[proofname,below=0.18cm of pdf] {proof.pdf};
+    \draw[compile] (tex.east) -- node[compilelabel,above] {compile} (pdf.west);
+
+    \node[prooficon] (lean) at (-2.45,-1.95)
+      {\includegraphics[height=1.05cm]{assets/itp/txt-file-icon-1215.png}};
+    \node[proofname,below=0.18cm of lean] {proof.lean};
+    \ifnum#1=1\relax
+      \node[prooficon,opacity=0.25] (html) at (2.45,-1.95)
+        {\includegraphics[height=1.05cm]{assets/itp/chrome-logo-m100.png}};
+    \else
+      \node[prooficon] (html) at (2.45,-1.95)
+        {\includegraphics[height=1.05cm]{assets/itp/chrome-logo-m100.png}};
+    \fi
+    \node[proofname,below=0.18cm of html] {proof.html};
+    \ifnum#1=1\relax
+      \node[badproof,callout absolute pointer={($(tex.north)+(0,0.03)$)}]
+        at (-3.25,2.72) {$0=1$};
+      \node[badproof,callout absolute pointer={($(pdf.north)+(0,0.03)$)}]
+        at (1.65,2.72) {$0=1$};
+      \node[badproof,callout absolute pointer={($(lean.north)+(0,0.03)$)}]
+        at (-3.25,-0.58) {$0=1$};
+      \draw[MendingCoral,line width=2pt]
+        ($(html.south west)+(-0.08,-0.08)$) -- ($(html.north east)+(0.08,0.08)$)
+        ($(html.north west)+(-0.08,0.08)$) -- ($(html.south east)+(0.08,-0.08)$);
+      \draw[compile,MendingCoral] (lean.east) --
+        node[compilelabel,above,text=MendingCoral] {error} (html.west);
+    \else
+      \draw[compile] (lean.east) -- node[compilelabel,above] {compile} (html.west);
+    \fi
+    \pgfresetboundingbox
+    \path[use as bounding box] (-4,-3) rectangle (4,3.1);
+  \end{tikzpicture}%
+  }%
+}
+
+\begin{frame}{What is Interactive Theorem Proving?}
+  \begin{center}
+    \itpbackgrounddiagram{0}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Compilation vs. Verification}
+  \begin{center}
+    \itpbackgrounddiagram{1}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Lean Demo}
+\setbeamertemplate{blocks}[rounded][shadow=false]
+\setbeamercolor{block title}{fg=white,bg=MendingTeal}
+\setbeamercolor{block body}{fg=MendingInk,bg=MendingPale}
+\small
+\begin{theorem}[infinitude of primes]
+    For all $n$, there exists prime $p$ such that $p\geq n$.
+\end{theorem}
+\pause
+\begin{proof}
+    Suppose for contradiction that every prime is less than $n$.
+    Let $x = n!+1$, and let $p$ be a prime that divides it.
+    By assumption, we have $p < n$.
+    We then have $p \mid n!$.
+    Therefore $p \mid 1$. Contradiction.
+\end{proof}
+\end{frame}
+
+\begin{frame}{Why Interactive Theorem Proving?}
+\begin{itemize}[<+->]
+\item Ever found an error in a paper?
+\item How about implementation bugs? See Fiat Cryptography \href{https://adam.chlipala.net/papers/FiatCryptoSP19/FiatCryptoSP19.pdf}{paper}, appendix A.
+\item Soundness: designed to never accept a false proof.
+\item Verification is easier than ever with AI assistance.
+\end{itemize}
+\end{frame}
+

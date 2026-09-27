@@ -5,10 +5,9 @@ presentation; new members have not. Introduce the recap without assuming that
 previous talk. Speaker notes are maintained here in Markdown alongside the
 LaTeX deck.
 
-The title, recap, and main-result sections below are speaker notes for
-implemented frames, including **Formalization details**. The remaining
-technical sections from **Background: programming language** onward are still
-a preparation outline, except the drafted final results recap. They will be turned into speaker notes as we develop those slides. Frame numbers count
+The title, ITP introduction, recap, and implemented technical slides have
+speaker notes below. Later technical sections remain a preparation outline
+and will become speaker notes as we develop their slides. Frame numbers count
 logical slides; overlay stages are listed within their slide. Keep the slides
 visual and sparse; explain the definitions, qualifications, and transitions
 aloud using these notes. Assume no cryptography background.
@@ -23,9 +22,40 @@ aloud using these notes. Assume no cryptography background.
 - Some of this introduction will look familiar from last year. We will review
   the cryptographic problem before explaining what is now machine checked.
 
+# Interactive theorem proving background
+
+**Slide 2 — What is Interactive Theorem Proving?**
+
+Compare the familiar LaTeX workflow to writing a formal proof. The output
+icons represent a rendered proof view; HTML is illustrative, not Lean’s
+kernel output. The crucial extra step is checking the proof, not its format.
+
+**Slide 3 — Compilation vs. Verification**
+
+LaTeX will happily typeset `0 = 1`. Lean rejects an attempted proof of it
+unless inconsistent assumptions or an unproved placeholder have been supplied.
+Checking is always relative to the stated axioms; that is the trust story
+we will return to later.
+
+**Slide 4 — Lean Demo (two stages)**
+
+Explain the primes proof, then show how a proof assistant checks the steps.
+Remember to handle the small `n` cases when making the factorial argument
+formal. The slide’s proof is the mathematical sketch.
+
+**Slide 5 — Why Interactive Theorem Proving? (four stages)**
+
+Invite a quick show of hands about errors in papers. Connect mathematical
+proof mistakes to implementation bugs; mention Fiat Cryptography’s examples.
+AI can help produce a proof, but the checker supplies the evidence, not the AI.
+
+Soundness is relative to the stated assumptions and the trusted checker.
+
+Transition: now introduce the cryptographic problem whose proof we checked.
+
 # Recap: FHE, why?
 
-**Slide 2 — Recap: FHE, why?**
+**Slide 6 — Recap: FHE, why?**
 
 - Fully homomorphic encryption (FHE) lets a server compute on encrypted data
   without holding the decryption key. The client encrypts the input and
@@ -47,7 +77,7 @@ Source: [2022 Gödel Prize citation](https://sigact.org/prizes/g%C3%B6del/citati
 
 # Recap: FHE, what?
 
-**Slide 3 — Recap: FHE, what?**
+**Slide 7 — Recap: FHE, what?**
 
 - Walk through the commuting diagram.
 - Define hats once: `hat{x}` is an encryption of `x`; `hat{y}` is an encrypted
@@ -65,7 +95,7 @@ Source: [2022 Gödel Prize citation](https://sigact.org/prizes/g%C3%B6del/citati
   diagram intentionally does not repeat “approximately” on the decryption
   arrow.
 
-**Slide 4 — Recap: FHE, what? — Cloud computing (seven stages)**
+**Slide 8 — Recap: FHE, what? — Cloud computing (seven stages)**
 
 Walk through the messages.
 Reinforce that the server does the computation while the client holds `k`.
@@ -75,7 +105,7 @@ first message to the server.
 
 # Recap: FHE timeline
 
-**Slide 5 — Recap: FHE timeline**
+**Slide 9 — Recap: FHE timeline**
 
 - The FHE question goes back to 1978; Gentry’s first construction appeared in
   2009. The 2011–2012 generation of constructions made major efficiency gains.
@@ -92,7 +122,7 @@ and the two 2022 events share one year marker.
 
 # Recap: The LM Attack
 
-**Slide 6 — Recap: The LM Attack (four stages; one round)**
+**Slide 10 — Recap: The LM Attack (four stages; one round)**
 
 1. Start with the client/server setting. The attacker knows the original
    plaintext `x` and the function `f` and can observe the ciphertext traffic.
@@ -120,7 +150,7 @@ Sources: [Li–Micciancio, EUROCRYPT 2021](https://eprint.iacr.org/2020/1533);
 
 # Recap: The LMSS patch construction
 
-**Slide 7 — Recap: The LMSS patch construction**
+**Slide 11 — Recap: The LMSS patch construction**
 
 - LMSS = Li, Micciancio, Schultz, and Sorrell. Their defense postprocesses
   approximate decryption with fresh Gaussian noise.
@@ -141,7 +171,7 @@ Source: [LMSS, CRYPTO 2022](https://eprint.iacr.org/2022/816).
 
 # Recap: The LMSS patch intuition
 
-**Slide 8 — Recap: The LMSS patch intuition**
+**Slide 12 — Recap: The LMSS patch intuition**
 
 - Start with the decomposition from the outline:
 
@@ -199,7 +229,7 @@ or become a backup slide.
 
 # Main Result
 
-**Slide 9 — Main result (two stages)**
+**Slide 13 — Main result (two stages)**
 
 1. The centered card says: “We formally verified the LMSS security reduction
    using Rocq/SSProve.” Give the headline before starting the technical part.
@@ -227,7 +257,7 @@ tail that stops outside the card. Adapted in `diagrams/results.tex`.
 
 # Formalization details
 
-**Slide 10 — Formalization details: trust and audit**
+**Slide 14 — Formalization details: trust and audit**
 
 The story is what a reader needs to trust and inspect to be convinced by the
 checked LMSS reduction. Separate three obligations: the trusted foundations,
@@ -321,7 +351,7 @@ versions.
 
 # Background: programming language
 
-**Slide 11 — Why program logic**
+**Slide 15 — Why program logic**
 
 Ask the audience whether this program can be written directly as an ordinary
 pure function. Pause before answering. The issue is the two effects: each call
@@ -343,7 +373,7 @@ contribution.
 
 # Background: What is a program?
 
-**Slide 12 — What is a program?**
+**Slide 16 — What is a program?**
 
 Use the three views as a quick reminder of a compiler course, not a taxonomy
 we need to develop. Text is what we write and parse. The semantic function is
@@ -368,7 +398,7 @@ assigns meaning to the data, and theorems relate the resulting behaviors.
 This distinction is enough for the next part; we do not need parsing details
 or a survey of operational versus denotational semantics.
 
-**Slide 13 — The dice program as a tree**
+**Slide 17 — The dice program as a tree**
 
 Use the function body from the preceding example, with `r = a + b; return r`.
 The initial `a = b = -1` belongs to its starting state. `r` is a local return
@@ -401,7 +431,7 @@ Next show the small collection of instructions we will use.
 
 # Background: The SSProve `code`
 
-**Slide 14 — SSProve’s Computational Monad**
+**Slide 18 — SSProve’s Computational Monad**
 
 Explain this `raw_code`.
 
@@ -412,7 +442,7 @@ of instructions as data.
 
 # Background: Why program logic
 
-**Slide 15 — From obvious to proved**
+**Slide 19 — From obvious to proved**
 
 Ask why the returned value is positive. It is obvious, but if asked to prove
 it, we would explain what each line establishes and what remains true from
@@ -443,7 +473,7 @@ too.
 
 # Background: Preconditions and postconditions
 
-**Slide 16 — Preconditions and postconditions**
+**Slide 20 — Preconditions and postconditions**
 
 Package the previous walkthrough as one claim. The first braces give the
 starting condition, the second the guarantee about the return value and final
@@ -457,7 +487,7 @@ off-slide unless asked.
 
 # Background: Program logic warm-up
 
-**Slide 17 — Data processing inequality**
+**Slide 21 — Data processing inequality**
 
 Composition means: sample `y` from `D(x)`, then sample the output from `P(y)`.
 The result is a mixture over the intermediate value, not ordinary composition
@@ -484,7 +514,7 @@ we can prove them one program fragment at a time.
 
 # Background: (Relational) judgments
 
-**Slide 18 — Relational judgments: additive error**
+**Slide 22 — Relational judgments: additive error**
 
 We used assertions about one program. Now the precondition relates two initial
 inputs/memories and the postcondition relates two final outcomes. A coupling
