@@ -1,0 +1,45 @@
+\begin{frame}{Run until the next call}
+  \begin{center}
+    \begin{minipage}{0.90\textwidth}
+      \begin{algorithm}[H]
+        \caption{Follow the computational monad}
+        \begin{algorithmic}
+          \small
+          \Function{Next}{$c$}
+            \State \textbf{match} $c$:
+            \State \hspace{1em} $\mathsf{ret}\;r$: \textbf{return} $\mathsf{Done}(r)$
+            \State \hspace{1em} $\mathsf{opr}\;\mathsf{Dec}\;x\;k$: \textbf{return} $\mathsf{Query}(x,k)$
+            \State \hspace{1em} Any other instruction, with continuation $k$:
+            \State \hspace{2em} Perform the instruction
+            \State \hspace{2em} \Return \Call{Next}{$k(\text{result})$}
+          \EndFunction
+        \end{algorithmic}
+      \end{algorithm}
+    \end{minipage}
+  \end{center}
+  \vspace{1pt}
+  \takeaway{Stop before decryption; its continuation is already the remaining program.}
+\end{frame}
+
+\begin{frame}{The compiler, with continuations}
+  \begin{center}
+    \begin{minipage}{0.90\textwidth}
+      \begin{algorithm}[H]
+        \caption{Expose up to $q$ decryption calls}
+        \begin{algorithmic}
+          \small
+          \Function{Compile}{$c,q$}
+            \State \textbf{if} $q=0$: \textbf{return} $c$
+            \State \Return the following program:
+            \State \hspace{1em} \textbf{match} $\Call{Next}{c}$:
+            \State \hspace{2em} $\mathsf{Done}(r)$: $\mathsf{return}\;r$
+            \State \hspace{2em} $\mathsf{Query}(x,k)$:
+            \State \hspace{3em} $y\leftarrow\mathsf{Dec}(x);\quad\Call{Compile}{k(y),q-1}$
+          \EndFunction
+        \end{algorithmic}
+      \end{algorithm}
+    \end{minipage}
+  \end{center}
+  \vspace{1pt}
+  \takeaway{Expose one call, answer it, and recursively compile the tail.}
+\end{frame}

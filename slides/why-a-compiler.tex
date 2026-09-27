@@ -1,0 +1,24 @@
+\begin{frame}{Putting the rules to work}
+  If the adversary came in $q$ rounds\ldots
+  \begin{align*}
+    A^{\mathsf{ODec}} &= \bigl\{
+      A_0;\ \mathsf{ODec};\ A_1;\ \cdots;\ \mathsf{ODec};\ A_q\bigr\}
+      \\[0.5em]
+    A^{\mathsf{ODec}'} &= \bigl\{
+      A_0;\ \mathsf{ODec}';\ A_1;\ \cdots;\ \mathsf{ODec}';\ A_q\bigr\}
+  \end{align*}
+  \medskip
+  Each decryption call contributes KL budget $\varepsilon$:
+  \[
+    \vDash_{\mathsf{Pyth}}\{I^{=}\}\;
+      A^{\mathsf{ODec}}\approx_s A^{\mathsf{ODec}'}\;\{I\}.
+  \]
+  \begin{center}
+    {\small $s=(0,\varepsilon,0,\ldots,\varepsilon,0),
+      \qquad\|s\|_1=q\varepsilon$.}
+  \end{center}
+  \vspace{0.4em}
+  \uncover<2->{%
+    \takeaway{Whoops: $A$ is code, with no extra structure.}
+  }
+\end{frame}

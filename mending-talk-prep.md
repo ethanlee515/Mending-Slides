@@ -191,7 +191,7 @@ Source: [LMSS, CRYPTO 2022](https://eprint.iacr.org/2022/816).
 - One answer is only the starting point. An adversary can adapt the next query
   to previous answers; the security proof must control the accumulated loss.
 - Transition to the main result: we now verify this adaptive composition
-  argument using a new program logic and a verified compiler.
+  argument using a new program logic and compiler.
 
 ## Pinned for later: masking intuition and parameter cost
 
@@ -233,8 +233,8 @@ or become a backup slide.
 
 1. The centered card says: “We formally verified the LMSS security reduction
    using Rocq/SSProve.” Give the headline before starting the technical part.
-2. Reveal the lower callout: a new Pythagorean program logic and a verified
-   compiler make this adaptive security proof checkable.
+2. Reveal the lower callout: a new Pythagorean program logic and compiler
+   make this adaptive security proof checkable.
 
 - Credit the underlying cryptographic reduction to LMSS. Our contribution is
   the checked reduction, logic, compiler, and required probability analysis.
@@ -673,29 +673,91 @@ we need it, rather than showing all these statements now.
 
 # Putting everything together
 
-`Adv^ODec ~ Adv^{ODec'}`
+**Slide 29 — Putting the rules to work (two stages)**
 
-`LHS = A1 ; ODec ; A2 ; ODec ; ... ; Aq`
-`RHS = A1 ; ODec'; A2 ; ODec'; ... ; Aq`
+First show the tempting paper proof. If we already had the adversary factored
+around its decryption calls, use Pyth sequencing to accumulate one KL budget
+per call and treat unchanged surrounding code as zero-cost. The slide first
+shows the Pyth judgment and its vector, including the zero-cost fragments.
+Its norm is `qε`; MW then gives AE error `sqrt(qε/2)`, which can be recalled
+in words instead of displaying another judgment here.
+The `A_i` are adaptive continuations depending on prior answers, not fixed
+independent computations. The notation is schematic; assume the common
+invariant `I`, compatible types/interfaces, and at most `q` selected calls.
+In the application, the two decryption oracles are real flooded decryption and
+its plaintext-centered simulator, not flooded versus unflooded decryption.
 
-So, `LHS ~_{q} RHS`...
+“Whoops: A is code, with no extra structure” means no supplied round
+factorization, not that its inductive syntax is unstructured. We are given
+an arbitrary SSProve program, not a list of
+rounds. Its calls and arguments depend on answers; selected decryption calls
+may be interleaved with other operations. `raw_code` has inductive structure,
+but does not supply this particular bounded selected-call decomposition.
+We need to construct that view and prove it preserves the original behavior.
+That is the second contribution’s role: a verified adapter from arbitrary
+adaptive oracle code to the sequence our new logic can handle.
 
-Whoops, `A = code`, no extra structure.
+Transition: we need an adapter from arbitrary code to this call-by-call proof
+view. Recall the computational monad and explain the compiler's goal first.
 
 # Our compiler
 
-# Compiler correctness
+**Slide 30 — From code to decryption rounds**
 
-# Game "hops"
+The compiler is the adapter between the program representation and the proof
+view on the previous slide. The constructors carry continuations; the program
+can branch, sample, use memory, and interleave other calls. None of this gives
+us a supplied list of decryption rounds. Expose up to `q` calls to the selected
+operation, keeping the adaptive continuations and the ordinary code between
+calls. A program can finish before `q` calls; do not insert dummy queries.
+
+The essential correctness requirement is the same output and final-memory
+distribution when all calls use the original oracle implementation. This lets
+us reason about the exposed program and transfer the result to the original.
+It is a proof-oriented transformation, not an optimization or restriction on
+the adversary. Here decryption is selected; the paper construction is generic
+in the selected operation.
+
+**Slide 31 — Which decryption call comes first? (two stages)**
+
+The first query is `c1` if `b`, otherwise `c2`. After exposing that call,
+the remaining program calls `Dec(c2)` only on the true branch; otherwise it
+is done. No dummy query is needed. Call results are unused in this example;
+in general, the continuation and its later queries can depend on the answer.
+The compiler repeats this transformation up to `q` times, so the adversary
+does not need to arrive already divided into rounds.
+
+**Slide 32 — Run until the next call**
+
+This routine is an effectful program: the prefix's samples, memory operations,
+and other calls happen when it runs, not while constructing the compiler.
+The pseudocode groups the ordinary constructors together. Reads and samples
+supply a value to their continuation; writes have a value-free continuation.
+It follows the realized branch and stops before executing the selected call.
+A continuation includes the rest of a block and what comes after it, so there
+is no unfinished imperative block to manage separately.
+
+For this pseudocode, pretend continuations are serializable and nothing
+fails. This is the conceptual monad picture, not a literal implementation.
+
+**Slide 33 — The compiler, with continuations**
+
+Compile returns program data. The inline match runs Next when that program
+runs, including the ordinary prefix effects. At a query, execute one
+decryption and recursively compile the continuation chosen by its answer.
+Done stops early; zero remaining rounds leaves the tail unchanged. We are
+still assuming serializable continuations and ignoring failures.
+
+# ~~Compiler correctness~~
+
+# ~~Game "hops"~~
 
 # Verified main theorem — Main result, revisited
 
 **Final results recap — after the technical section**
 
-This slide is drafted in `slides/main-result-recap.tex`. It is currently the
-11th logical slide: only the formalization-details slide of the technical
-section has been drafted so far. Insert further technical slides after slide
-10 and before this recap.
+This slide is drafted in `slides/main-result-recap.tex` and stays after the
+technical section as that section grows.
 
 - Return to the result announced earlier, now using the game and program
   notation introduced during the technical part.
@@ -711,9 +773,13 @@ section has been drafted so far. Insert further technical slides after slide
   `gamma > 0` is the flooding-width multiplier. Flooding uses
   `sigma = max(1, E) * gamma` for public error bound `E`.
 - Connect the result to the tools just explained: conditional KL budgets add
-  in the Pythagorean program logic; the verified trace compiler lifts the
-  local oracle rule to arbitrary adaptive programs; one final conversion to
-  statistical distance gives the square-root loss.
+  in the Pythagorean program logic; the compiler lifts the local oracle rule
+  to arbitrary adaptive programs; one final conversion to statistical distance
+  gives the square-root loss.
+- Both the program logic and compiler correctness are formally verified:
+  the logic's rules are proved against SSProve semantics, and compilation
+  with the original oracle preserves the output/final-memory distribution.
+  The reduction using these tools is also checked in Rocq/SSProve.
 - An ordinary per-query statistical-distance hybrid bound scales linearly in
   `q`. Preserving KL until the end gives the parameter-critical square root,
   matching the paper’s abstract.
@@ -739,11 +805,20 @@ Sources: `../mending/Pythagorean-RHL/main.tex` (abstract) and
 (“Checked noise-flooding reduction”). Credit LMSS for the underlying reduction
 and the existing square-root composition principle.
 
-After the result, either discuss the pinned noise-width/precision calculation
-or move directly to future directions. Decide once the technical section’s
-length is clear.
-
 # Future directions
 
-* Push towards entire CKKS
+**Slide 35 — Future directions**
 
+The reduction is conditional on the abstract FHE assumptions; it does not yet
+verify CKKS end to end. To instantiate it, account for bad keys/encryptions
+with an up-to-bad argument, and connect CKKS's plaintext ring and norm to the
+abstract distance-and-translation interface. Then prove CKKS itself is IND-CPA
+secure and approximately correct. Rounding is a challenge: randomized and
+deterministic rounding differ, and practical deterministic variants can rely
+on heuristics that need precise statements before formalization.
+
+# Closing
+
+**Slide 36 — Thank you!**
+
+Open the floor for questions.

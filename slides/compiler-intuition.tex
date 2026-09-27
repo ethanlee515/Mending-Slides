@@ -1,0 +1,29 @@
+\begin{frame}[fragile]{Which decryption call comes first?}
+  \lstset{basicstyle=\ttfamily\small,columns=fullflexible,
+    keepspaces=true,showstringspaces=false}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.43\textwidth}
+      \textbf{Original program}\par
+      \begin{lstlisting}
+b <$ {0, 1}
+if b {
+    Dec(c1)
+}
+Dec(c2)
+      \end{lstlisting}
+    \column{0.53\textwidth}
+      \begin{uncoverenv}<2->
+      \textbf{Expose one call}\par
+      \begin{lstlisting}
+b <$ {0, 1}
+x1 = if b then c1 else c2
+Dec(x1)
+if b {
+    Dec(c2)
+}
+      \end{lstlisting}
+      \end{uncoverenv}
+  \end{columns}
+  \vfill
+  \uncover<2->{\takeaway{Remaining program: $\mathsf{Dec}(c_2)$ if $b$; otherwise, done.}}
+\end{frame}
