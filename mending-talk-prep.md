@@ -403,39 +403,12 @@ Next show the small collection of instructions we will use.
 
 **Slide 14 — SSProve’s Computational Monad**
 
-Walk down the constructors: `ret` returns a value; `opr` calls an imported
-operation/oracle; `getr` reads memory; `putr` writes memory; `sampler` samples.
-The result type is `A`. `choiceType` is library type infrastructure; leave
-it unexplained here. Locations carry their value types, hence `l` also occurs
-as a type. An operation signature supplies input/output types (`src`, `tgt`),
-and a sampling operation supplies its sample type (`Arit`). Mention these
-only if needed; the audience should follow the instruction names first.
+Explain this `raw_code`.
 
-For the branching instruction constructors, `k` is a function: given the
-value returned by the operation, it constructs the remaining program.
-For a write there is no new result to receive, so `k` is just the remaining
-program. This resembles the instruction tree we drew, with the branches
-specified by functions instead of a conventional first-order AST. Pure
-expressions and computations such as `a + b` remain ordinary Rocq terms.
-
-We are cheating slightly with the AST picture: this is a free computational
-monad with continuations (often called higher-order abstract syntax). It is
-not a parsed Python AST and does not contain a dedicated node for every pure
-expression. Keep the analogy “instructions as data” and avoid a monad tutorial.
-For those who ask: sequencing feeds the earlier result to the continuation;
-that is the bind operation. The semantics still assigns mathematical behavior
-to the complete program, just as in the previous picture.
-
-The slide declaration is copied from the installed Mending opam switch:
-`SSProve/Crypt/package/pkg_core_definition.v`, lines 92–97.
-The local copy is `assets/ssprove/raw-code.v`; only the two-space section
-indentation was removed. The paper’s `mechanization-and-trusted-base.tex`
-explains the same free-monadic syntax and separation of pure computation
-from probabilistic/stateful effects.
-
-Transition: the language gives programs meaning. A program logic lets us prove
-properties one instruction at a time, rather than expanding the entire
-semantic function each time.
+We are cheating slightly with the AST picture: this is a computational monad
+with continuations, rather than a conventional AST. Pure computations stay in
+Rocq. For this talk, brush those differences under the rug and keep the picture
+of instructions as data.
 
 # Background: Why program logic
 
