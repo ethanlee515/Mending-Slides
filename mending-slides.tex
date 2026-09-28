@@ -5,6 +5,7 @@
 \usepackage{microtype}
 \usepackage{amsmath,amssymb}
 \usepackage{booktabs}
+\usepackage{mathpartir}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{listings}
@@ -87,22 +88,22 @@
 % Recap ported from ../group-meeting-2025/main.tex.
 % Speaker notes and source links live in mending-talk-prep.md.
 
-\begin{frame}{Recap: FHE, why?}
-  \relax
-  {\Large\bfseries Compute on encrypted data.\par}
-  \vspace{1.5em}
-  \begin{itemize}
-    \item G\"odel Prize, 2022
-    \item Lattice-based; conjectured quantum resistant
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{Recap: FHE, what?}
-  \begin{center}
-    \fhecommute
-    \par\vspace{0.5em}
-    {\large $y\approx f(x)$\par}
-  \end{center}
+\begin{frame}[t]{Recap: FHE, why and what?}
+  \vspace{0.8em}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.48\textwidth}
+      {\Large\bfseries Compute on encrypted data.\par}
+      \vspace{1.2em}
+      \begin{itemize}
+        \item G\"odel Prize, 2022
+        \item Lattice-based; conjectured quantum resistant
+      \end{itemize}
+    \column{0.48\textwidth}
+      \centering
+      \resizebox{\linewidth}{!}{\fhecommute}
+      \par\vspace{0.5em}
+      {\large $y\approx f(x)$\par}
+  \end{columns}
 \end{frame}
 
 \begin{frame}{Recap: FHE, what? --- Cloud computing}
@@ -147,10 +148,8 @@
     \operatorname{Dec}'_{k}(\hat{x})
       &= \operatorname{Dec}_{k}(\hat{x})+e' \\
       &= x+e(k)+e' \\
-      &\approx_{\mathrm{dist}} x+e'.
+      &\approx x+e'.
   \end{align*}
-  \vspace{0.5em}
-  \takeaway{Wide noise hides a small key-dependent shift.}
 \end{frame}
 
 % The main-results layout is adapted from the deleted 2021 QMPC theorem slide.

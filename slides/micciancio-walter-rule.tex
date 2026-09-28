@@ -1,7 +1,7 @@
 % MicciancioWalterRule, ProgramLogics/Pyth.v:529-543.
-\begin{frame}{From KL budgets to additive error}
+\begin{frame}{Micciancio-Walter Rule}
   \[
-    \frac{
+    \inferrule*{
       \vDash_{\mathsf{Pyth}}\{\mathsf{Pre}\}\;
         c_L\approx_s c_R\;\{\mathsf{Post}\}
     }{
@@ -9,8 +9,5 @@
         c_L\approx_{\sqrt{\|s\|_1/2}}c_R\;
         \{o_L=o_R\}
     }
-    \quad\text{Micciancio--Walter}
   \]
-  \vspace{1.4em}
-  \takeaway{Keep KL budgets; convert once at the end.}
 \end{frame}

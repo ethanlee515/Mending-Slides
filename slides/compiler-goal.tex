@@ -1,33 +1,28 @@
-\begin{frame}{From code to decryption rounds}
+\begin{frame}[fragile]{From code to decryption rounds}
   \begin{columns}[T,onlytextwidth]
-    \column{0.38\textwidth}
-      \textbf{Given: arbitrary adaptive code}\par
+    \column{0.36\textwidth}
+      {\small\textbf{Given: arbitrary adaptive code}}\par
       \smallskip
-      {\small Recall \texttt{raw\_code}:}\par
-      \[
-        \begin{aligned}
-          &\mathsf{ret}\;r\\
-          &\mathsf{opr}\;o\;x\;k\\
-          &\mathsf{getr}\;\ell\;k\\
-          &\mathsf{putr}\;\ell\;v\;k\\
-          &\mathsf{sampler}\;D\;k
-        \end{aligned}
-      \]
-    \column{0.08\textwidth}
+      \lstinputlisting[basicstyle=\ttfamily\small,columns=fullflexible,
+        keepspaces=true,showstringspaces=false,
+        keywordstyle=\color{MendingTeal}\bfseries,
+        morekeywords={Inductive,Type}]{assets/ssprove/raw-code-abbreviated.v}
+    \column{0.12\textwidth}
       \vspace{1.6cm}
-      \centering{\Large\color{MendingTeal}$\longrightarrow$}
-    \column{0.50\textwidth}
-      \textbf{Wanted: expose up to $q$ calls}\par
+      \centering
+      \begin{tikzpicture}
+        \draw[-{Latex},thick,MendingTeal] (0,0) --
+          node[above,font=\small,text=MendingInk] {compile} (1.4,0);
+      \end{tikzpicture}
+    \column{0.48\textwidth}
+      {\small\textbf{Wanted: expose up to $q$ calls}}\par
       \smallskip
-      \[
-        \begin{gathered}
-          \bigl\{A_0;\ \mathsf{Dec};\ A_1;\ \cdots;\\[0.3em]
-          \mathsf{Dec};\ A_q\bigr\}
-        \end{gathered}
-      \]
+      \begin{center}
+        \resizebox{\linewidth}{!}{$
+          \bigl\{A_0;\ \mathsf{Dec};\ A_1;\ \cdots;\ \mathsf{Dec};\ A_q\bigr\}
+        $}
+      \end{center}
       \smallskip
       {\small Now apply the Pythagorean sequence rule.}\par
   \end{columns}
-  \vfill
-  \takeaway{Preserve behavior; expose the calls for our sequence rule.}
 \end{frame}

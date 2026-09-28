@@ -1,23 +1,18 @@
 % Full-mass specialization of additiveErrorSeqRule, ProgramLogics/Ae.v:594-613.
 \begin{frame}{Sequencing: additive error}
   \[
-    \frac{
-      \begin{gathered}
+    \inferrule*{
         \vDash_{\mathsf{AE}}\{\mathsf{Pre}\}\;
           c_L\approx_{\varepsilon_1}c_R\;
           \{\textcolor{MendingTeal}{\mathsf{Mid}}\}
-        \\[0.5em]
+      \\
         \vDash_{\mathsf{AE}}\{\textcolor{MendingTeal}{\mathsf{Mid}}\}\;
           k_L\approx_{\varepsilon_2}k_R\;\{\mathsf{Post}\}
-      \end{gathered}
     }{
       \vDash_{\mathsf{AE}}\{\mathsf{Pre}\}\;
         (y_L\leftarrow c_L;\;k_L(y_L))
         \approx_{\textcolor{MendingCoral}{\varepsilon_1+\varepsilon_2}}
         (y_R\leftarrow c_R;\;k_R(y_R))\;\{\mathsf{Post}\}
     }
-    \quad\textsc{Seq}
   \]
-  \vspace{1.4em}
-  \takeaway{Same intermediate relation; error budgets add.}
 \end{frame}

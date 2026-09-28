@@ -1,29 +1,18 @@
 % pythSeqRule, ProgramLogics/Pyth.v:567-589; full-mass presentation.
 \begin{frame}{Sequencing: Pythagorean budgets}
   \[
-    \frac{
-      \begin{gathered}
+    \inferrule*{
         \vDash_{\mathsf{Pyth}}\{\mathsf{Pre}\}\;
           c_L\approx_s c_R\;
           \{\textcolor{MendingTeal}{\mathsf{Mid}}\}
-        \\[0.5em]
+      \\
         \vDash_{\mathsf{Pyth}}\{\textcolor{MendingTeal}{\mathsf{Mid}^{=}}\}\;
           k_L\approx_t k_R\;\{\mathsf{Post}\}
-      \end{gathered}
     }{
       \vDash_{\mathsf{Pyth}}\{\mathsf{Pre}\}\;
         (y_L\leftarrow c_L;\;k_L(y_L))
         \approx_{\textcolor{MendingCoral}{s\mathbin{+\!\!+}t}}
         (y_R\leftarrow c_R;\;k_R(y_R))\;\{\mathsf{Post}\}
     }
-    \quad\textsc{Seq}
   \]
-  \medskip
-  {\small
-    $\mathsf{Mid}^{=}$: equal intermediate values and memory, satisfying $\mathsf{Mid}$.\par
-    \medskip
-    $s\mathbin{+\!\!+}t$: concatenate the budget vectors.\par
-  }
-  \vspace{0.9em}
-  \takeaway{Concatenate KL budgets now; take one square root later.}
 \end{frame}

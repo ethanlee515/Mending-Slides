@@ -6,19 +6,25 @@
       \qquad(\varepsilon\geq0)
   \]
   \medskip
-  For every initial pair $(\rho_L,\rho_R)$ satisfying $\mathsf{Pre}$:
-  \[
-    \exists\pi\in\mathsf{Coupl}(\mu_L,\mu_R),\qquad
-    \Pr_{(o_L,o_R)\sim\pi}
-      [\mathsf{Post}(o_L,o_R)]\geq1-\varepsilon.
-  \]
-  {\small
-    $\mu_i=[\![c_i]\!](\rho_i)$:
-    outputs and final memory.\par
-    \medskip
-    Coupling: a joint distribution with the correct marginals.\par
+  \uncover<2->{%
+    For every initial pair $(\rho_L,\rho_R)$ satisfying $\mathsf{Pre}$:\par
   }
-  \vspace{1em}
-  \takeaway{Equality postcondition $o_L=o_R$:
-    $\|\mu_L-\mu_R\|_1\leq2\varepsilon$.}
+  \uncover<3->{%
+    \medskip
+    {\small $\mu_i=[\![c_i]\!](\rho_i)$:
+      outputs and final memory.\par}
+  }
+  \uncover<4->{%
+    \[
+      \exists\pi\in\mathsf{Coupl}(\mu_L,\mu_R),\qquad
+      \Pr_{(o_L,o_R)\sim\pi}
+        [\mathsf{Post}(o_L,o_R)]\geq1-\varepsilon.
+    \]
+    {\small Coupling: a joint distribution with the correct marginals.\par}
+  }
+  \uncover<5->{%
+    \vspace{1em}
+    \takeaway{Equality postcondition $o_L=o_R$:
+      $\|\mu_L-\mu_R\|_1\leq2\varepsilon$.}
+  }
 \end{frame}

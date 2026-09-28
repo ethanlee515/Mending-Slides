@@ -3,19 +3,22 @@
 \begin{frame}{Formalization details}
   \begin{columns}[T,onlytextwidth]
     \column{0.40\textwidth}
-      \textbf{Trust}\par\medskip
+      \textbf{Trusted Computing Base}\par\medskip
       {\small
         Rocq kernel / standard library\par
         MathComp / Analysis\par
         SSProve semantics\par
       }
       \vspace{1.2em}
-      \textbf{\color{MendingTeal}Kernel-checked}\par\smallskip
+      \uncover<2->{%
+      \textbf{\color{MendingTeal}Checked by Rocq}\par\smallskip
       {\small
-        Program logic verified against\par
-        SSProve semantics.\par
+        Program logic and compiler\par
+        verified against SSProve semantics.\par
       }
+      }%
     \column{0.56\textwidth}
+      \uncover<3->{%
       \textbf{Audit}\par\smallskip
       {\small
       \begin{tabular}{@{}lr@{}}
@@ -34,6 +37,7 @@
         \bottomrule
       \end{tabular}\par
       }
+      }%
   \end{columns}
   \vspace{0.5em}
   {\footnotesize\color{MendingMuted}

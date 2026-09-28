@@ -1,5 +1,6 @@
-\begin{frame}[fragile]{Why \emph{program} logic}
-  \begin{columns}[c,onlytextwidth]
+\begin{frame}[fragile,t]{Why \emph{program} logic}
+  \vspace{0.8em}
+  \begin{columns}[T,onlytextwidth]
     \column{0.43\textwidth}
       Consider this program:\par
       \begin{lstlisting}[language=Python,basicstyle=\ttfamily\small,
@@ -17,13 +18,15 @@ def roll():
     \column{0.53\textwidth}
       Can we write this as a pure\par
       Rocq / Lean function?\par
+      \pause
       \vspace{0.7em}
       \textbf{No.}\par
       \begin{itemize}
         \item Overwriting global variables
-        \item Random integers
+        \item Random values
       \end{itemize}
+      \vspace{0.8em}
+      \pause
+      \takeaway{Solution: an \emph{embedded} language.}
   \end{columns}
-  \vspace{1.1em}
-  \takeaway{Solution: an \emph{embedded} language.}
 \end{frame}
