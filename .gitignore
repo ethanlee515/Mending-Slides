@@ -332,3 +332,6 @@ TSWLatexianTemp*
 
 # Generated slide deck and previews
 /build/
+
+# Local download cache left over from the retired Lean demo
+/lean-demo/.lake/

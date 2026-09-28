@@ -38,6 +38,10 @@ Reproduce the measurement with
 The paper's Makefile regenerates its full table during the manuscript build;
 the slide keeps a grouped local copy so this deck builds independently.
 
-The infinitude-of-primes Lean demo from `slides/itp-background.tex` is restored
-in [lean-demo/InfinitelyManyPrimes.lean](lean-demo/InfinitelyManyPrimes.lean).
-See [lean-demo/README.md](lean-demo/README.md) for setup and presentation instructions.
+The opening ITP slides use Rocq, with a two-step “check + render” workflow
+for the HTML proof view. The infinitude-of-primes demo is in
+[rocq-demo/InfinitelyManyPrimes.v](rocq-demo/InfinitelyManyPrimes.v).
+Run `make demo` to check it and generate `rocq-demo/build/proof.html`.
+See [rocq-demo/README.md](rocq-demo/README.md) for dependencies and live
+presentation instructions. The demo's Rocq dependencies are separate from
+the LaTeX slide build.

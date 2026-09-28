@@ -1,5 +1,6 @@
 % Ported from ethanlee515/Lean-QEC-Talk, itp-background.tex.
 % Source revision: 41c6457af660b27f07317002c1462ecdff8c7e87.
+% Adapted here to Rocq with a checked-then-rendered HTML workflow.
 % Both frames share geometry and a fixed bounding box, so annotations cannot rescale it.
 \newcommand{\itpbackgrounddiagram}[1]{%
   \resizebox{!}{4.7cm}{%
@@ -13,22 +14,22 @@
       rounded corners=4pt,fill=white,align=center,font=\small,
       inner xsep=7pt,inner ysep=5pt}
   ]
-    \node[prooficon] (tex) at (-2.45,1.35)
+    \node[prooficon] (tex) at (-2.85,1.35)
       {\includegraphics[height=1.05cm]{assets/itp/txt-file-icon-1215.png}};
     \node[proofname,below=0.18cm of tex] {proof.tex};
-    \node[prooficon] (pdf) at (2.45,1.35)
+    \node[prooficon] (pdf) at (2.85,1.35)
       {\includegraphics[height=1.05cm]{assets/itp/chrome-logo-m100.png}};
     \node[proofname,below=0.18cm of pdf] {proof.pdf};
     \draw[compile] (tex.east) -- node[compilelabel,above] {compile} (pdf.west);
 
-    \node[prooficon] (lean) at (-2.45,-1.95)
+    \node[prooficon] (rocq) at (-2.85,-1.95)
       {\includegraphics[height=1.05cm]{assets/itp/txt-file-icon-1215.png}};
-    \node[proofname,below=0.18cm of lean] {proof.lean};
+    \node[proofname,below=0.18cm of rocq] {proof.v};
     \ifnum#1=1\relax
-      \node[prooficon,opacity=0.25] (html) at (2.45,-1.95)
+      \node[prooficon,opacity=0.25] (html) at (2.85,-1.95)
         {\includegraphics[height=1.05cm]{assets/itp/chrome-logo-m100.png}};
     \else
-      \node[prooficon] (html) at (2.45,-1.95)
+      \node[prooficon] (html) at (2.85,-1.95)
         {\includegraphics[height=1.05cm]{assets/itp/chrome-logo-m100.png}};
     \fi
     \node[proofname,below=0.18cm of html] {proof.html};
@@ -37,18 +38,18 @@
         at (-3.25,2.72) {$0=1$};
       \node[badproof,callout absolute pointer={($(pdf.north)+(0,0.03)$)}]
         at (1.65,2.72) {$0=1$};
-      \node[badproof,callout absolute pointer={($(lean.north)+(0,0.03)$)}]
+      \node[badproof,callout absolute pointer={($(rocq.north)+(0,0.03)$)}]
         at (-3.25,-0.58) {$0=1$};
       \draw[MendingCoral,line width=2pt]
         ($(html.south west)+(-0.08,-0.08)$) -- ($(html.north east)+(0.08,0.08)$)
         ($(html.north west)+(-0.08,0.08)$) -- ($(html.south east)+(0.08,-0.08)$);
-      \draw[compile,MendingCoral] (lean.east) --
-        node[compilelabel,above,text=MendingCoral] {error} (html.west);
+      \draw[compile,MendingCoral] (rocq.east) --
+        node[compilelabel,above,text=MendingCoral] {check fails} (html.west);
     \else
-      \draw[compile] (lean.east) -- node[compilelabel,above] {compile} (html.west);
+      \draw[compile] (rocq.east) -- node[compilelabel,above] {check + render} (html.west);
     \fi
     \pgfresetboundingbox
-    \path[use as bounding box] (-4,-3) rectangle (4,3.1);
+    \path[use as bounding box] (-4.5,-3) rectangle (4.5,3.1);
   \end{tikzpicture}%
   }%
 }
@@ -65,21 +66,20 @@
   \end{center}
 \end{frame}
 
-\begin{frame}{Lean Demo}
+\begin{frame}{Rocq Demo}
 \setbeamertemplate{blocks}[rounded][shadow=false]
 \setbeamercolor{block title}{fg=white,bg=MendingTeal}
 \setbeamercolor{block body}{fg=MendingInk,bg=MendingPale}
 \small
 \begin{theorem}[infinitude of primes]
-    For all $n$, there exists prime $p$ such that $p\geq n$.
+    For every $n\in\mathbb N$, there is a prime $p>n$.
 \end{theorem}
 \pause
 \begin{proof}
-    Suppose for contradiction that every prime is less than $n$.
-    Let $x = n!+1$, and let $p$ be a prime that divides it.
-    By assumption, we have $p < n$.
-    We then have $p \mid n!$.
-    Therefore $p \mid 1$. Contradiction.
+    Let $x=n!+1>1$, and choose a prime divisor $p\mid x$.
+    Suppose for contradiction that $p\leq n$.
+    Then $p\mid n!$, so $p\mid(x-n!)=1$.
+    But a prime cannot divide $1$. Therefore $p>n$.
 \end{proof}
 \end{frame}
 

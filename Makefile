@@ -4,7 +4,7 @@ LATEXMK := latexmk
 LATEXMK_FLAGS := -pdf -interaction=nonstopmode -halt-on-error -file-line-error -outdir=$(BUILD_DIR)
 
 .DEFAULT_GOAL := all
-.PHONY: all watch clean
+.PHONY: all watch clean demo
 
 all: $(BUILD_DIR)/$(DECK).pdf
 
@@ -19,3 +19,7 @@ watch: | $(BUILD_DIR)
 
 clean:
 	$(LATEXMK) -C -outdir=$(BUILD_DIR) $(DECK).tex
+
+# The live proof demo has its own Rocq dependencies.
+demo:
+	$(MAKE) -C rocq-demo html

@@ -27,22 +27,59 @@ aloud using these notes. Assume no cryptography background.
 
 **Slide 2 — What is Interactive Theorem Proving?**
 
-Compare the familiar LaTeX workflow to writing a formal proof. The output
-icons represent a rendered proof view; HTML is illustrative, not Lean’s
-kernel output. The crucial extra step is checking the proof, not its format.
+Compare the familiar LaTeX workflow to writing a formal proof in Rocq.
+The lower arrow says “check + render”: first Rocq checks `proof.v`, then a
+separate documentation step produces `proof.html`. In our demo, these are
+`rocq compile` followed by `rocq doc` (formerly `coqdoc`). HTML is the human
+readable proof view, not the kernel's output. The Makefile runs the renderer
+only if the proof checks. The crucial extra step is checking, not formatting.
+
+The diagram is a schematic workflow. The actual checked artifact is a `.vo`
+file; the HTML is a source/documentation view. Mention this only if asked.
+Rocq was formerly called Coq. Introduce the name here so SSProve can simply
+be described as a Rocq library on slide 6.
 
 **Slide 3 — Compilation vs. Verification**
 
-LaTeX will happily typeset `0 = 1`. Lean rejects an attempted proof of it
+LaTeX will happily typeset `0 = 1`. Rocq rejects an attempted proof of it
 unless inconsistent assumptions or an unproved placeholder have been supplied.
-Checking is always relative to the stated axioms; that is the trust story
-we will return to later.
+The red arrow says “check fails.” The faded, crossed-out browser represents
+our stopped workflow: `rocq doc` by itself can render invalid source, so the
+failure is in proof checking, not in HTML generation. Checking is always
+relative to the stated axioms; that is the trust story we will return to later.
+`Admitted` would accept a missing proof as an assumption, rather than prove it.
 
-**Slide 4 — Lean Demo (two stages)**
+**Slide 4 — Rocq Demo (two stages)**
 
-Explain the primes proof, then show how a proof assistant checks the steps.
-Remember to handle the small `n` cases when making the factorial argument
-formal. The slide’s proof is the mathematical sketch.
+Reveal the theorem first and the informal proof next, then open
+`rocq-demo/InfinitelyManyPrimes.v` in VsRocq. The theorem uses `p > n`, matching
+the checked statement. The proof now starts constructively: fix `n`, let
+`x = n! + 1 > 1`, and choose a prime divisor `p`. Only then argue by
+contradiction: if `p <= n`, it divides both `n!` and `x`, hence divides `1`.
+This order avoids an upfront classical negation of an existential statement.
+Factorial positivity covers `n = 0` and `n = 1` without special cases.
+
+Point out the mathematical landmarks, not every tactic symbol:
+`intro n`, `pose x := n ! + 1`, choosing `[p prime_p p_divides_x]`,
+`p_le_n`, `p_divides_factorial`, and `p_divides_one`. Explain that `have`
+records a fact, `%|` means divisibility, and the line with `apply/negP`
+introduces the contradiction assumption. The local factorial notation
+makes `n !` look familiar. These few glosses are enough for the audience to
+follow the informal proof alongside the checked one.
+
+The final contradiction is a Boolean divisibility predicate being both
+true and false. `Qed` closes the proof; `Print Assumptions` reports “Closed
+under the global context.” The demo uses elementary MathComp facts, not the
+library theorem that already proves infinitude of primes. It needs no SSProve
+or classical axioms.
+
+For a live exercise, delete and reconstruct the short proof of
+`p_divides_one`; keep the other arithmetic details already filled in.
+The exact workflow and editor setup are in `rocq-demo/README.md`.
+Use `make demo` beforehand to check the proof and generate the optional
+HTML source view. Proof states are shown in the editor; the default `rocq doc --light` HTML
+shows definitions and theorem statements with proofs hidden, not interactive
+proof states.
 
 **Slide 5 — Why Interactive Theorem Proving? (three stages)**
 
@@ -58,8 +95,8 @@ cryptographic proofs, then introduce the cryptographic problem.
 
 **Slide 6 — SSProve**
 
-SSProve is a Rocq library for machine-checked cryptographic proofs. Briefly
-introduce Rocq as another proof assistant, in the same family as Lean. Its
+SSProve is a library for the Rocq proof assistant just demonstrated,
+specialized to machine-checked cryptographic proofs. Its
 original paper received a CSF 2021 **Distinguished Paper Award**; use that
 name rather than “best paper.” Rocq was called Coq when the paper appeared.
 
