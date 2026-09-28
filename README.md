@@ -3,11 +3,12 @@
 Slides for arXiv:2608.13846, “Verified Pythagorean Composition for Adaptive
 Cryptographic Games: Noise Flooding in Homomorphic Encryption”.
 
-The deck currently contains the title page, FHE/LM/LMSS recap, a main-result
-headline, formalization details, and a detailed results recap.
-Edit `mending-slides.tex`; speaker notes live in `mending-talk-prep.md`.
-Further technical slides remain an outline. Insert them after
-`slides/formalization-details.tex` and before `slides/main-result-recap.tex`.
+The deck contains the title page, ITP introduction, FHE/LM/LMSS background,
+main-result headline, formalization details, program-logic and compiler slides,
+detailed results recap, future directions, and closing.
+Edit `mending-slides.tex` and the included files in `slides/`; speaker notes
+live in `mending-talk-prep.md`. Insert further technical slides before
+`slides/main-result-recap.tex` and update the corresponding notes.
 This is a group meeting talk for Xiaodi Wu’s group, including new members.
 Its 16:9 Metropolis styling follows `../quantum-fair-exchange-talk`;
 authors and affiliations come from the camera-ready author block in

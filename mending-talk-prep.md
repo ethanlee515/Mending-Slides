@@ -1,15 +1,15 @@
-# Mending — speaker notes and remaining outline
+# Mending — speaker notes
 
 Group meeting talk for Xiaodi Wu’s group. Some listeners attended the 2025
 presentation; new members have not. Introduce the recap without assuming that
 previous talk. Speaker notes are maintained here in Markdown alongside the
 LaTeX deck.
 
-The title, ITP introduction, recap, and implemented technical slides have
-speaker notes below. Later technical sections remain a preparation outline
-and will become speaker notes as we develop their slides. Frame numbers count
-logical slides; overlay stages are listed within their slide. Keep the slides
-visual and sparse; explain the definitions, qualifications, and transitions
+Speaker notes below follow the current deck, from the title and ITP
+introduction through the cryptographic background, technical development,
+and closing. Pinned preparation material remains alongside the relevant notes.
+Frame numbers count logical slides; overlay stages are listed within their
+slide. Keep the slides visual and sparse; explain the definitions, qualifications, and transitions
 aloud using these notes. Assume no cryptography background.
 
 # Title page
@@ -53,9 +53,9 @@ Soundness is relative to the stated assumptions and the trusted checker.
 
 Transition: now introduce the cryptographic problem whose proof we checked.
 
-# Recap: FHE, why and what?
+# Fully Homomorphic Encryptions
 
-**Slide 6 — Recap: FHE, why and what?**
+**Slide 6 — Fully Homomorphic Encryptions**
 
 - Fully homomorphic encryption (FHE) lets a server compute on encrypted data
   without holding the decryption key. The client encrypts the input and
@@ -92,7 +92,9 @@ Continue with the diagram on the same slide:
 - This slide introduces general FHE: the two routes recover the same result.
   Save approximate FHE and numerical error for the timeline and LM attack.
 
-**Slide 7 — Recap: FHE, what? — Cloud computing (seven stages)**
+# FHE in cloud computing
+
+**Slide 7 — FHE in cloud computing (seven stages)**
 
 Walk through the messages.
 Reinforce that the server does the computation while the client holds `k`.
@@ -100,9 +102,9 @@ The transmitted `hat{x}` implicitly includes the helper material for evaluation,
 created during setup. Key generation happens before encryption and before the
 first message to the server.
 
-# Recap: FHE timeline
+# FHE timeline
 
-**Slide 8 — Recap: FHE timeline**
+**Slide 8 — FHE timeline**
 
 - The FHE question goes back to 1978; Gentry’s first construction appeared in
   2009. The 2011–2012 generation of constructions made major efficiency gains.
@@ -116,9 +118,9 @@ first message to the server.
 Redrawn from **FHE Timeline**; the efficiency milestone is labeled 2011–2012
 with the 2022 marker reserved for the LMSS defense.
 
-# Recap: The LM Attack
+# The LM Attack
 
-**Slide 9 — Recap: The LM Attack (four stages; one round)**
+**Slide 9 — The LM Attack (four stages; one round)**
 
 1. Start with the client/server setting. The attacker knows the original
    plaintext `x` and the function `f` and can observe the ciphertext traffic.
@@ -144,9 +146,9 @@ algebraic example, not a universal practical query count.
 Sources: [Li–Micciancio, EUROCRYPT 2021](https://eprint.iacr.org/2020/1533);
 [Guo et al., USENIX Security 2024, Section 3](https://www.usenix.org/system/files/usenixsecurity24-guo-qian_1.pdf).
 
-# Recap: The LMSS patch construction
+# The LMSS patch
 
-**Slide 10 — Recap: The LMSS patch construction**
+**Slide 10 — The LMSS patch**
 
 - LMSS = Li, Micciancio, Schultz, and Sorrell. Their defense postprocesses
   approximate decryption with fresh Gaussian noise.
@@ -165,11 +167,11 @@ Ported from **The Patch**, using `algorithm` and `algpseudocode` as in the
 old talk, with explicit Gaussian width and dimension notation.
 Source: [LMSS, CRYPTO 2022](https://eprint.iacr.org/2022/816).
 
-# Recap: The LMSS patch intuition
+# LMSS intuition
 
-**Slide 11 — Recap: The LMSS patch intuition**
+**Slide 11 — LMSS intuition**
 
-- Start with the decomposition from the outline:
+- Walk through the displayed decomposition:
 
   ```text
   Dec'_k(hat{x}) = Dec_k(hat{x}) + e'
@@ -223,7 +225,7 @@ or become a backup slide.
   back-of-envelope discussion and check its parameterization and security
   convention. Do not quote remembered widths as established numbers.
 
-# Main Result
+# Main result
 
 **Slide 12 — Main result (two stages)**
 
@@ -237,13 +239,9 @@ or become a backup slide.
 - Transition into the technical part: how do we represent programs and their
   security properties, and how do the logic and compiler check this proof?
 
-## Pinned: introducing formal verification
-
-We have not introduced formal verification before this headline. Most of the
-target audience probably knows it, so leave the headline as requested for now.
-Revisit whether a one-sentence spoken reminder is needed: the proof is written
-in Rocq and checked by its kernel; SSProve supplies the cryptographic-program
-semantics. The later formalization section can introduce the tools in detail.
+Recall the ITP introduction: the proof is written in Rocq and checked by
+its kernel; SSProve supplies the cryptographic-program semantics. The next
+slide introduces the tools and trust obligations in detail.
 
 Layout reference: the rounded theorem card and progressively revealed callout
 in [the deleted QMPC main-theorem slide](https://github.com/ethanlee515/QMPC-SWIA-presentation/commit/1b686d933aef9aa13a8018f27376160d20521db8),
@@ -253,7 +251,7 @@ tail that stops outside the card. Adapted in `diagrams/results.tex`.
 
 # Formalization details
 
-**Slide 13 — Formalization details: trust and audit (three stages)**
+**Slide 13 — Formalization details (three stages)**
 
 The story is what a reader needs to trust and inspect to be convinced by the
 checked LMSS reduction. Reveal the trusted computing base first, then the
@@ -347,7 +345,7 @@ Sources: `../mending/Pythagorean-RHL/mechanization-and-trusted-base.tex`
 These facts describe the paper’s pinned artifact, not today’s latest library
 versions.
 
-# Background: programming language
+# Why program logic
 
 **Slide 14 — Why program logic (three stages)**
 
@@ -370,7 +368,7 @@ inside a proof assistant? Explain programs as data on the next slide, before
 introducing their semantics. This infrastructure is background, not our
 contribution.
 
-# Background: What is a program?
+# What is a program?
 
 **Slide 15 — What is a program? (three stages)**
 
@@ -398,7 +396,9 @@ The next slide will show how an interpreter assigns meaning to this data.
 We do not need parsing details or a survey of operational versus denotational
 semantics here.
 
-**Slide 16 — The dice program as a tree**
+# Abstract syntax trees
+
+**Slide 16 — Abstract syntax trees**
 
 Use the function body from the preceding example, with `r = a + b; return r`.
 The initial `a = b = -1` belongs to its starting state. `r` is a local return
@@ -429,7 +429,7 @@ theorem relates the meanings before and after transformation.
 Transition: SSProve gives us its own instruction representation and interpreter.
 Next show the small collection of instructions we will use.
 
-# Background: The SSProve `code`
+# SSProve’s Computational Monad
 
 **Slide 17 — SSProve’s Computational Monad**
 
@@ -440,9 +440,9 @@ with continuations, rather than a conventional AST. Pure computations stay in
 Rocq. For this talk, brush those differences under the rug and keep the picture
 of instructions as data.
 
-# Background: Why program logic
+# Program logic motivations
 
-**Slide 18 — From obvious to proved (seven stages)**
+**Slide 18 — Program logic motivations (seven stages)**
 
 Ask why the returned value is positive. It is obvious, but if asked to prove
 it, we would explain what each line establishes and what remains true from
@@ -472,7 +472,7 @@ Transition: these before/after assertions are what a judgment records. Our
 security proof will compare two programs, so we will need relational judgments
 too.
 
-# Background: Preconditions and postconditions
+# Preconditions and postconditions
 
 **Slide 19 — Preconditions and postconditions (two stages)**
 
@@ -487,7 +487,7 @@ Hoare guarantees the postcondition on the support of successful outputs;
 it does not itself prove termination or full mass. Keep that distinction
 off-slide unless asked.
 
-# Background: Sequencing — Hoare
+# Sequencing: Hoare logic
 
 **Slide 20 — Sequencing: Hoare logic**
 
@@ -500,7 +500,7 @@ through too. The second premise holds for every intermediate value/memory
 satisfying `Mid`. Input arguments are suppressed in this schematic notation.
 Connect this to keeping `a > 0` while sampling `b` in our walkthrough.
 
-# Background: Program logic warm-up
+# Crypto Analysis: Data Processing Inequality
 
 **Slide 21 — Crypto Analysis: Data Processing Inequality (two stages)**
 
@@ -529,7 +529,7 @@ picture for this talk.
 Transition: package these semantic comparisons into relational judgments, so
 we can prove them one program fragment at a time.
 
-# Background: (Relational) judgments
+# Relational judgments: additive error
 
 **Slide 22 — Relational judgments: additive error (five stages)**
 
@@ -573,7 +573,7 @@ memories and intermediate values. This is why the judgment supports stepping
 through and composing program fragments, rather than only comparing final
 answer distributions.
 
-# Background: Sequencing — additive error
+# Sequencing: additive error
 
 **Slide 23 — Sequencing: additive error**
 
@@ -594,7 +594,7 @@ Transition: ordinary additive-error sequencing pays by adding errors at each
 step. Our later judgment retains KL information so we can convert once at
 the end instead.
 
-# Pythagorean preservation
+# FHE Analysis: Pythagorean Preservation
 
 **Slide 24 — FHE Analysis: Pythagorean Preservation (two stages)**
 
@@ -620,7 +620,7 @@ uses natural logarithms.
 Now ask how to capture this transcript structure and these conditional costs
 inside a judgment for SSProve programs.
 
-# Our `Pyth` judgment
+# Our Pythagorean judgment
 
 **Slide 25 — Our Pythagorean judgment (five stages)**
 
@@ -656,7 +656,7 @@ postcondition. Pause to explain each piece before advancing.
 absolute-continuity and summability requirements of the probability lemma.
 We are expressing the required hypotheses, not assuming a new trusted rule.
 
-# Our Micciancio-Walter Rule
+# Micciancio-Walter Rule
 
 **Slide 26 — Micciancio-Walter Rule**
 
@@ -673,9 +673,9 @@ L1 bound is `sqrt(2||s||₁)`. No normalization change to the AE judgment.
 Next: how do we build the vector of KL budgets without paying a square root
 at every step? Show the main sequencing rule.
 
-# Our sequence rules
+# Sequencing: Pythagorean
 
-**Slide 27 — Sequencing: Pythagorean budgets**
+**Slide 27 — Sequencing: Pythagorean**
 
 Use the familiar two-premise `inferrule` shape without a rule label or
 takeaway box. Keep the symbols in the rule; explain `Mid⁼` and `++` aloud
@@ -697,7 +697,7 @@ named lemmas in this file, not a count of every sequencing-related result
 throughout the repository. Mention shared code as zero-cost coordinates when
 we need it, rather than showing all these statements now.
 
-# Putting everything together
+# Putting the rules to work
 
 **Slide 28 — Putting the rules to work (three stages)**
 
@@ -727,7 +727,7 @@ adaptive oracle code to the sequence our new logic can handle.
 Transition: we need an adapter from arbitrary code to this call-by-call proof
 view. Recall the computational monad and explain the compiler's goal first.
 
-# Our compiler
+# From code to decryption rounds
 
 **Slide 29 — From code to decryption rounds**
 
@@ -753,6 +753,8 @@ It is a proof-oriented transformation, not an optimization or restriction on
 the adversary. Here decryption is selected; the paper construction is generic
 in the selected operation.
 
+# Compiler intuition
+
 **Slide 30 — Compiler intuition (two stages)**
 
 The first query is `c1` if `b`, otherwise `c2`. After exposing that call,
@@ -761,6 +763,8 @@ is done. No dummy query is needed. Call results are unused in this example;
 in general, the continuation and its later queries can depend on the answer.
 The compiler repeats this transformation up to `q` times, so the adversary
 does not need to arrive already divided into rounds.
+
+# Run until the next call
 
 **Slide 31 — Run until the next call**
 
@@ -775,7 +779,9 @@ is no unfinished imperative block to manage separately.
 For this pseudocode, pretend continuations are serializable and nothing
 fails. This is the conceptual monad picture, not a literal implementation.
 
-**Slide 32 — The compiler, with continuations**
+# Our compiler
+
+**Slide 32 — Our compiler**
 
 Compile returns program data. The inline match runs Next when that program
 runs, including the ordinary prefix effects. At a query, execute one
@@ -783,11 +789,7 @@ decryption and recursively compile the continuation chosen by its answer.
 Done stops early; zero remaining rounds leaves the tail unchanged. We are
 still assuming serializable continuations and ignoring failures.
 
-# ~~Compiler correctness~~
-
-# ~~Game "hops"~~
-
-# Verified main theorem — Main result, revisited
+# Main result, revisited
 
 **Slide 33 — Main result, revisited (two stages)**
 
