@@ -91,9 +91,9 @@ Soundness is relative to the stated assumptions and the trusted checker.
 Transition: briefly introduce SSProve as the Rocq library we use for
 cryptographic proofs, then introduce the cryptographic problem.
 
-# SSProve
+# Verification of Cryptography: SSProve
 
-**Slide 6 — SSProve**
+**Slide 6 — Verification of Cryptography: SSProve**
 
 SSProve is a library for the Rocq proof assistant just demonstrated,
 specialized to machine-checked cryptographic proofs. Its
@@ -181,13 +181,54 @@ first message to the server.
   2009. The 2011–2012 generation of constructions made major efficiency gains.
   “Efficient constructions” means major theoretical efficiency gains, not that
   FHE was already practical for every application.
-- CKKS introduced approximate homomorphic arithmetic in 2017.
+- Connect the efficient-constructions milestone to its impact: the 2011 and
+  2012 papers were recognized by the 2022 Gödel Prize. Homomorphic encryption
+  also reached deployed applications: Microsoft Edge Password Monitor uses
+  a protocol built on Microsoft SEAL to check passwords against breached
+  credentials privately. These are later consequences, not events at the
+  2011–2012 position on the timeline.
+- The earlier schemes naturally provide exact arithmetic modulo an integer.
+  Real-valued numerical workloads can be encoded, but managing precision
+  and scaling with exact arithmetic can be costly. Avoid implying that
+  earlier FHE cannot compute with real-number representations or cannot
+  support machine learning at all.
+- CKKS introduced approximate homomorphic arithmetic in 2017. The timeline
+  says “Floating-point support (CKKS)” in the numerical-computing sense:
+  practical interfaces accept and return floating-point real/complex data.
+  SEAL's CKKS example uses `double` vectors for both input and output.
+- The mantissa/exponent analogy also has substance internally. Schematically,
+  encode a scalar as an integer `m ≈ Δx` and interpret it as `m/Δ` (the actual
+  encoding uses an integer polynomial for a vector). The public scale `Δ`
+  is shared across the vector. Multiplication multiplies the scales;
+  rescaling divides both the ciphertext representation and its scale by a
+  modulus factor, with rounding, bringing the scale back down. This is
+  fixed-point-like encoding with an adjustable shared scale, rather than
+  an independent exponent for each number. The analogy is useful without
+  claiming IEEE operation semantics. Keep these details off-slide.
+
+Possible spoken transition:
+
+“These efficient constructions were recognized by the Gödel Prize, and
+homomorphic encryption has reached applications such as Edge’s Password
+Monitor. But these schemes naturally work with exact integer arithmetic.
+For numerical workloads, like machine learning, we often want real numbers
+and can tolerate small errors. CKKS takes advantage of that: we get
+floating-point-style arithmetic on encrypted data. The approximation
+helps with efficiency—but now decryption can reveal something new.”
+
 - Our focus is the sequence at the right: Li–Micciancio’s attack in 2021 and
   the LMSS noise-flooding defense in 2022.
 - Transition: allowing approximate results changes what decryption can reveal.
 
 Redrawn from **FHE Timeline**; the efficiency milestone is labeled 2011–2012
 with the 2022 marker reserved for the LMSS defense.
+
+Sources: [2022 Gödel Prize announcement](https://sigact.org/articles/news.html),
+[Microsoft Research’s Password Monitor deployment account](https://www.microsoft.com/en-us/research/blog/password-monitor-safeguarding-passwords-in-microsoft-edge/),
+[Microsoft’s current Password Monitor policy](https://learn.microsoft.com/en-us/deployedge/microsoft-edge-browser-policies/passwordmonitorallowed),
+[original CKKS paper](https://eprint.iacr.org/2016/421), and
+[SEAL’s scheme comparison](https://github.com/microsoft/SEAL#introduction), and
+[SEAL’s CKKS example and rescaling explanation](https://github.com/microsoft/SEAL/blob/main/native/examples/5_ckks_basics.cpp).
 
 # The LM Attack
 
@@ -782,6 +823,9 @@ the end instead.
 **Slide 26 — FHE Analysis: Pythagorean Preservation (two stages)**
 
 Explain the lemma first; then reveal the question about program logic.
+For this presentation, assume programs always terminate successfully and
+all distributions are full (total mass one). The slide leaves this implicit;
+the paper and formalization handle the technical side conditions.
 
 Read the coordinates as steps in a transcript, and `a` as the entire history
 before the current step. Both distributions are conditioned on the same
@@ -789,9 +833,24 @@ history. This is a bound on conditional KL, not merely on unconditional
 coordinate marginals; the coordinates need not be independent.
 
 The chain rule adds those KL costs, and Pinsker converts the sum once to
-L1 distance: `||P-Q||₁ ≤ sqrt(2 sum_i s_i)`. This is twice the paper’s TVD
-bound; the underlying result and security-loss constants are unchanged.
-Data processing also bounds the final-coordinate marginal by the same quantity.
+L1 distance, then projection bounds the final-coordinate marginals:
+`||P_n-Q_n||₁ ≤ ||𝒫-𝒬||₁ ≤ sqrt(2 sum_i s_i)`. Here `P_i,Q_i` are
+coordinate marginals of the joint transcript distributions `𝒫,𝒬`, and
+`P_i | a, Q_i | a` are their conditional laws given the prefix. The slide
+shows the final-coordinate bound, matching the next slide's program outputs.
+This is twice the paper's TVD bound; the underlying result and security-loss
+constants are unchanged.
+
+Source alignment: MW Section 3, property 1*, bounds the whole joint
+transcript in statistical distance. Our main-text “Conditional-coordinate
+preservation” theorem states the final-coordinate TVD bound; the appendix
+states the stronger whole-transcript bound. In `Probability/KL/Pyth.v`,
+`pythDist_final_total_variation` explicitly applies `total_variation_dmargin_le`
+to the last-coordinate projection, then Pinsker and the KL chain bound.
+`ProgramLogics/Pyth.v` invokes this lemma in `MicciancioWalterRule`.
+See [MW's original paper](https://eprint.iacr.org/2017/259.pdf),
+`../mending/Pythagorean-RHL/program-logic-for-adaptive-games.tex`, and
+`../mending/Pythagorean-RHL/appendix-additional-probability-details.tex`.
 This is the probability lemma behind the better composition rate: contrast
 one square root of the sum with adding a square root at each step.
 

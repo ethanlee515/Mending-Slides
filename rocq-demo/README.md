@@ -38,7 +38,11 @@ Open `InfinitelyManyPrimes.v` with [VsRocq](https://github.com/rocq-prover/vsroc
 in VS Code. Its extension and `vsrocq-language-server` need matching versions;
 point the extension to your switch's `vsrocqtop` executable. Use manual
 proof mode and step through the sentences to show hypotheses and goals.
-The `_RocqProject` file suppresses the expected MathComp notation warnings.
+The `_RocqProject` file suppresses the expected MathComp notation warnings
+using `-arg "-w -notation-overridden"`; compiler options in a project file
+must be forwarded with `-arg`. If you changed this file while VsRocq was
+open, close and reopen the `.v` file or run “Developer: Reload Window” so
+the language server reads the updated configuration.
 
 Keep the audience's attention on the named mathematical facts, not every
 tactic character:

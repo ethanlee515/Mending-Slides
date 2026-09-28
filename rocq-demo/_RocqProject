@@ -1,2 +1,2 @@
--w -notation-overridden
+-arg "-w -notation-overridden"
 InfinitelyManyPrimes.v
