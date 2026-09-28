@@ -128,8 +128,8 @@
       \begin{algorithm}[H]
         \caption{Noise-flooded decryption}
         \begin{algorithmic}
-          \Procedure{$\operatorname{Dec}'$}{$k,\hat{x}$}
-            \State $y\gets\operatorname{Dec}_{k}(\hat{x})$
+          \Procedure{$\operatorname{Dec}'_{k}$}{$\hat{y}$}
+            \State $y\gets\operatorname{Dec}_{k}(\hat{y})$
             \State $e'\gets\mathcal{DG}^{n}_{\sigma}$
             \State \Return $y+e'$
           \EndProcedure
@@ -141,10 +141,11 @@
 
 \begin{frame}{LMSS intuition}
   \begin{align*}
-    \operatorname{Dec}'_{k}(\hat{x})
-      &= \operatorname{Dec}_{k}(\hat{x})+e' \\
-      &= x+e(k)+e' \\
-      &\approx x+e'.
+    \operatorname{Dec}'_{k}(\hat{y})
+      &= \operatorname{Dec}_{k}(\hat{y})+e' \\
+      \uncover<2->{&= y+e'} \\
+      \uncover<3->{&= f(x)+e(k)+e'} \\
+      \uncover<4->{&\approx f(x)+e'.}
   \end{align*}
 \end{frame}
 
@@ -155,6 +156,8 @@
 
 % Technical part: add further slides here, before the detailed results recap.
 \input{slides/formalization-details}
+\input{slides/what-is-ssprove}
+\input{slides/why-ssprove}
 \input{slides/embedded-language-motivation}
 \input{slides/what-is-a-program}
 \input{slides/program-as-data}

@@ -152,7 +152,8 @@ Sources: [Li–Micciancio, EUROCRYPT 2021](https://eprint.iacr.org/2020/1533);
 
 - LMSS = Li, Micciancio, Schultz, and Sorrell. Their defense postprocesses
   approximate decryption with fresh Gaussian noise.
-- Walk through the `Dec'` procedure.
+- Walk through `Dec'_k(hat{y})`: `k` is the client's secret key and
+  `hat{y}` is the evaluated ciphertext. Set `y = Dec_k(hat{y})`.
 - Fresh noise, every answer: encryption and evaluation remain unchanged.
 - `DG` denotes a discrete Gaussian; `n` is the plaintext dimension and `sigma`
   is the flooding width. The width must dominate the public bound on the
@@ -171,12 +172,15 @@ Source: [LMSS, CRYPTO 2022](https://eprint.iacr.org/2022/816).
 
 **Slide 11 — LMSS intuition**
 
-- Walk through the displayed decomposition:
+- Reveal the displayed decomposition one line at a time. The intermediate
+  `y` is the approximate decrypted answer from the previous slide;
+  `f(x)` is the intended answer:
 
   ```text
-  Dec'_k(hat{x}) = Dec_k(hat{x}) + e'
-                 = x + e(k) + e'
-                 ≈ x + e'
+  Dec'_k(hat{y}) = Dec_k(hat{y}) + e'
+                 = y + e'
+                 = f(x) + e(k) + e'
+                 ≈ f(x) + e'
   ```
 
 - The small secret-dependent shift is difficult to distinguish inside a much
@@ -264,6 +268,12 @@ and the proof chain checked by the kernel.
   and MathComp Analysis with their real-number/classical infrastructure, and SSProve’s
   program, heap, package, linking, and subdistribution semantics. This is
   broader than “TCB = Rocq/SSProve”.
+  Say aloud: “SSProve already brings Rocq and MathComp/Analysis with it;
+  our probability development also uses MathComp directly. These are shared
+  foundations, not three independent trust choices. By ‘SSProve semantics’
+  I mean the model of what programs do; SSProve’s proved rules, like ours,
+  are checked by Rocq.” The slide names the semantic boundary specifically;
+  the Rocq and MathComp entries summarize their relevant foundations.
 - **Audit the specification:** check that the formal scheme interface, IND-CPA
   and IND-CPAD games, noise-flooded construction, concrete reduction, and final
   statement represent the intended cryptographic claim. A kernel check proves
@@ -334,9 +344,8 @@ Implementation/reproducibility details, if asked (off-slide):
   parallel jobs; this is a single reproduction observation, not a performance
   claim. The manuscript refreshes its Rocq excerpts from checked sources.
 
-Transition: the next slides explain what these program definitions and proved
-logic rules look like, starting with how a proof assistant represents a
-probabilistic, stateful program.
+Transition: “Before unpacking the program logic and compiler, let me
+briefly introduce SSProve and why we chose it.”
 
 Sources: `../mending/Pythagorean-RHL/mechanization-and-trusted-base.tex`
 (“Trusted computing base” and the final audit-surface paragraph),
@@ -345,9 +354,135 @@ Sources: `../mending/Pythagorean-RHL/mechanization-and-trusted-base.tex`
 These facts describe the paper’s pinned artifact, not today’s latest library
 versions.
 
+# What is SSProve?
+
+**Slide 14 — What is SSProve?**
+
+SSProve is a Rocq library for machine-checked cryptographic proofs. Its
+original paper received a CSF 2021 **Distinguished Paper Award**; use that
+name rather than “best paper.” Rocq was called Coq when the paper appeared.
+
+Connect the building blocks to the cloud example. A cryptographic game is
+an experiment that runs the scheme and adversary and decides whether the
+adversary wins. SSProve also provides a formal notion of adversary and
+the probability that it wins the game. Connect this to the winning
+probabilities on the main-result slide: these are probabilities of events
+in the game semantics. An oracle is an interface the adversary can call, such as
+the decryption service. Private memory and access restrictions model which
+component can read a key or modify a table. Packages collect callable
+operations; linking connects components through their interfaces. These
+are reusable infrastructure rather than our contribution.
+
+Keep this introduction at the level of what the library supplies. We will
+explain how it represents programs after this brief framework aside.
+Budget about one minute.
+
+Transition: “Why did we choose this framework for the noise-flooding proof?”
+
+Sources: [SSProve repository and documentation](https://github.com/SSProve/ssprove),
+[original paper](https://eprint.iacr.org/2021/397), and
+[CSF award list](https://www.ieee-security.org/CSFWweb/distinguished.html).
+
+# Why SSProve?
+
+**Slide 15 — Why SSProve? (three stages)**
+
+Keep this as a brief continuation of the SSProve introduction, before
+the program-language story begins. Reveal the three columns from left to
+right, keeping their positions fixed. Each column has two levels: a concrete
+heading and short supporting cues. Keep the EasyCrypt comparison spoken;
+the slide ends with the three columns. Budget about one minute.
+
+- **Rocq + MathComp:** the “Real analysis” cue acknowledges the work on
+  infinite sums, summability, and convergence needed for countably supported
+  discrete Gaussians and KL divergence. Mention that this required substantial
+  proof engineering; save the analytic details for questions.
+  Rocq and MathComp/Analysis provide mathematical foundations on which we
+  prove this analysis and connect it to the program proof. The Gaussian
+  and KL results are our proved development, not advertised as ready-made
+  SSProve features.
+- **Formal semantics:** the cue is “Reasoning proved correct inside Rocq.”
+  This means proving the validity of the reasoning methods themselves,
+  not merely using them to prove that one program computes the right answer.
+  Explain “meaning” as what a program does: its distribution of outputs and
+  final memory. That meaning is available as mathematics inside Rocq, and
+  our reasoning steps must have proofs connecting them to it. Save
+  “inference rules” and “soundness” for after the audience has seen program
+  logic. We still inherit the kernel, library and classical assumptions,
+  and the obligation to audit the model and specification.
+- **Extensibility:** programs are Rocq data, so we can define new claims
+  about their meaning, prove rules for those claims, and write program
+  compilations with correctness proofs. The slide cue “Verified compilations”
+  points directly to our compiler later in the talk. Brief forward pointer:
+  “Next I’ll explain how we represent programs and reason about them.
+  Later we’ll transform them to expose their decryption rounds.” No need to teach the new
+  program logic or compiler on this slide.
+
+Possible spoken version:
+
+“What bothered me with EasyCrypt was having to trust the tool’s built-in
+ways of reasoning about programs. I actually ran into unsound transformations.
+Then you’re very sad—or very happy, because now you can prove anything.
+With SSProve, both what a program does and the justification for how we
+reason about it live inside Rocq. If we need a new way of reasoning, we
+prove that it is correct. Rocq checks that proof. That’s the control I
+wanted for this project.”
+
+Keep the complaint personal and concrete. EasyCrypt programs do have a
+mathematical semantics; avoid saying they “don’t mean anything.” Users can
+combine reasoning steps and prove reusable lemmas, so avoid calling the
+available proofs a fixed, finite menu. The distinction here is having the
+program model and proofs justifying our reasoning inside Rocq. The issue
+is where the soundness obligation lives in the installed tool, not whether
+an intended semantics exists on paper. Say that this addresses the trusted
+program-reasoning boundary, rather than promising immunity to every
+soundness or modelling bug. See the SSProve paper, Sections 3–5 and 8,
+for its foundational construction and comparison with EasyCrypt.
+
+Implementation detail, if asked: [EasyCrypt #1041](https://github.com/EasyCrypt/easycrypt/pull/1041)
+is an open refactoring proposal, inspected in this session, that describes
+program-logic steps as TCB rules and adds proof-node rechecking by rerunning
+the shared subgoal builder. That kind of rechecking is distinct from a
+Rocq proof that the reasoning step is valid for the program semantics.
+Keep this development detail off-slide.
+
+Historical examples for the spoken explanation, not extra slide text:
+[EasyCrypt #102](https://github.com/EasyCrypt/easycrypt/issues/102) reports
+an inconsistency in how abstract and concrete module state is represented
+by `glob`, with an example deriving `false`.
+[#210](https://github.com/EasyCrypt/easycrypt/issues/210) reports a `fission`
+transformation that splits one randomly terminating loop into two loops
+with independent stopping times, losing the original correlation; the
+report credits Ethan with the example.
+[#212](https://github.com/EasyCrypt/easycrypt/issues/212) reports a
+probabilistic `while` rule that permits contradictory termination
+probabilities and a derivation of `false`. All three reports are closed;
+use them as historical motivation rather than a claim about current
+versions. The concrete benefit we claim for our development is a checked
+soundness proof relative to its stated semantics and assumptions.
+
+EasyCrypt is a major established alternative for cryptographic game proofs.
+The point is why SSProve fits this project: mathematical analysis and new
+program reasoning within the same proof assistant. Do not claim that
+SSProve and EasyCrypt exhaust the available tools: FCF (in Rocq/Coq) and
+CryptHOL (in Isabelle/HOL) also exist. We are explaining our requirements,
+not presenting a comprehensive tool comparison or claiming alternatives
+cannot support extensions.
+
+Transition: “The result and formalization overview promised a program
+logic and a compiler. What does that mean inside a proof assistant?
+Let’s start with a tiny program that uses memory and randomness.”
+
+Sources: [SSProve paper](https://eprint.iacr.org/2021/397),
+[EasyCrypt](https://www.easycrypt.info/),
+[FCF](https://github.com/adampetcher/fcf),
+[CryptHOL](https://isa-afp.org/entries/CryptHOL.html), and the local paper’s
+`mechanization-and-trusted-base.tex` for our Gaussian, logic, and compiler
+proof chain.
+
 # Why program logic
 
-**Slide 14 — Why program logic (three stages)**
+**Slide 16 — Why program logic (three stages)**
 
 Ask the audience whether this program can be written directly as an ordinary
 pure function. Reveal the answer and effects after the first pause, then the
@@ -370,7 +505,7 @@ contribution.
 
 # What is a program?
 
-**Slide 15 — What is a program? (three stages)**
+**Slide 17 — What is a program? (three stages)**
 
 Use the three views as a quick reminder of a compiler course, not a taxonomy
 we need to develop. Reveal the string, function, and tree views one by one.
@@ -398,7 +533,7 @@ semantics here.
 
 # Abstract syntax trees
 
-**Slide 16 — Abstract syntax trees**
+**Slide 18 — Abstract syntax trees**
 
 Use the function body from the preceding example, with `r = a + b; return r`.
 The initial `a = b = -1` belongs to its starting state. `r` is a local return
@@ -431,9 +566,10 @@ Next show the small collection of instructions we will use.
 
 # SSProve’s Computational Monad
 
-**Slide 17 — SSProve’s Computational Monad**
+**Slide 19 — SSProve’s Computational Monad**
 
-Explain this `raw_code`.
+Explain this `raw_code`. Then move directly from the instruction
+representation to reasoning about what those instructions establish.
 
 We are cheating slightly with the AST picture: this is a computational monad
 with continuations, rather than a conventional AST. Pure computations stay in
@@ -442,7 +578,7 @@ of instructions as data.
 
 # Program logic motivations
 
-**Slide 18 — Program logic motivations (seven stages)**
+**Slide 20 — Program logic motivations (seven stages)**
 
 Ask why the returned value is positive. It is obvious, but if asked to prove
 it, we would explain what each line establishes and what remains true from
@@ -474,7 +610,7 @@ too.
 
 # Preconditions and postconditions
 
-**Slide 19 — Preconditions and postconditions (two stages)**
+**Slide 21 — Preconditions and postconditions (two stages)**
 
 Introduce the general Hoare judgment first; pause before revealing the `roll`
 example. Package the previous walkthrough as one claim. The first braces give the
@@ -489,7 +625,7 @@ off-slide unless asked.
 
 # Sequencing: Hoare logic
 
-**Slide 20 — Sequencing: Hoare logic**
+**Slide 22 — Sequencing: Hoare logic**
 
 The rule uses the paper’s `mathpartir` / `inferrule` layout, without a rule
 label. Read it from top to bottom: prove the two premises to obtain the
@@ -502,7 +638,7 @@ Connect this to keeping `a > 0` while sampling `b` in our walkthrough.
 
 # Crypto Analysis: Data Processing Inequality
 
-**Slide 21 — Crypto Analysis: Data Processing Inequality (two stages)**
+**Slide 23 — Crypto Analysis: Data Processing Inequality (two stages)**
 
 Explain the theorem first; then reveal the question about programs.
 
@@ -531,11 +667,11 @@ we can prove them one program fragment at a time.
 
 # Relational judgments: additive error
 
-**Slide 22 — Relational judgments: additive error (five stages)**
+**Slide 24 — Relational judgments: additive error (three stages)**
 
-Reveal the judgment first, then the initial pair, then the coupling of the
-inline program semantics, then its probability guarantee, and finally the
-equality-distance consequence. Explain a coupling and the output/final-memory
+Reveal the judgment first, then the initial-pair condition, coupling of the
+inline program semantics, and probability guarantee together as one definition.
+Finally reveal the equality-distance consequence. Explain a coupling and the output/final-memory
 semantics aloud; the slide has no separate `mu` notation. Pause to explain
 each piece before advancing. Budget sign constraints are omitted from this
 schematic picture.
@@ -575,7 +711,7 @@ answer distributions.
 
 # Sequencing: additive error
 
-**Slide 23 — Sequencing: additive error**
+**Slide 25 — Sequencing: additive error**
 
 Use the paper’s `inferrule` layout without a rule label or takeaway box.
 Same structure, now comparing two executions. `Mid` relates the intermediate
@@ -596,7 +732,7 @@ the end instead.
 
 # FHE Analysis: Pythagorean Preservation
 
-**Slide 24 — FHE Analysis: Pythagorean Preservation (two stages)**
+**Slide 26 — FHE Analysis: Pythagorean Preservation (two stages)**
 
 Explain the lemma first; then reveal the question about program logic.
 
@@ -622,7 +758,7 @@ inside a judgment for SSProve programs.
 
 # Our Pythagorean judgment
 
-**Slide 25 — Our Pythagorean judgment (five stages)**
+**Slide 27 — Our Pythagorean judgment (four stages)**
 
 The judgment packages the hypotheses of the probability lemma as a property
 of two programs. The final transcript marginals are the actual program
@@ -648,9 +784,11 @@ the sequence rule will concatenate witnesses. We retain the no-failure picture
 here. The formal definition uses completed, encoded output/heap states and
 checks `Post` on the support of successful outputs.
 
-Reveal the judgment/cost vector first, then the transcript witnesses, then
-the final-marginal identities, then the conditional KL bound, then the common
-postcondition. Pause to explain each piece before advancing.
+Reveal the judgment/cost vector first, then the initial-pair condition,
+transcript witnesses, and final-marginal identities together. Reveal the
+“For every coordinate” clause and its conditional KL bound on their own
+click, then the common postcondition. Pause to explain each piece before
+advancing.
 
 `finiteKL` is omitted from the slide, not from the definition. It carries the
 absolute-continuity and summability requirements of the probability lemma.
@@ -658,7 +796,7 @@ We are expressing the required hypotheses, not assuming a new trusted rule.
 
 # Micciancio-Walter Rule
 
-**Slide 26 — Micciancio-Walter Rule**
+**Slide 28 — Micciancio-Walter Rule**
 
 The slide uses an unlabeled `inferrule`; its title names the rule.
 This is what the new judgment buys us: the probability lemma bounds the final
@@ -675,7 +813,7 @@ at every step? Show the main sequencing rule.
 
 # Sequencing: Pythagorean
 
-**Slide 27 — Sequencing: Pythagorean**
+**Slide 29 — Sequencing: Pythagorean**
 
 Use the familiar two-premise `inferrule` shape without a rule label or
 takeaway box. Keep the symbols in the rule; explain `Mid⁼` and `++` aloud
@@ -699,7 +837,7 @@ we need it, rather than showing all these statements now.
 
 # Putting the rules to work
 
-**Slide 28 — Putting the rules to work (three stages)**
+**Slide 30 — Putting the rules to work (three stages)**
 
 First show the tempting paper proof. If we already had the adversary factored
 around its decryption calls, use Pyth sequencing to accumulate one KL budget
@@ -729,7 +867,7 @@ view. Recall the computational monad and explain the compiler's goal first.
 
 # From code to decryption rounds
 
-**Slide 29 — From code to decryption rounds**
+**Slide 31 — From code to decryption rounds**
 
 The compiler is the adapter between the program representation and the proof
 view on the previous slide. The left column reuses slide 17’s Rocq listing
@@ -755,7 +893,7 @@ in the selected operation.
 
 # Compiler intuition
 
-**Slide 30 — Compiler intuition (two stages)**
+**Slide 32 — Compiler intuition (two stages)**
 
 The first query is `c1` if `b`, otherwise `c2`. After exposing that call,
 the remaining program calls `Dec(c2)` only on the true branch; otherwise it
@@ -766,7 +904,7 @@ does not need to arrive already divided into rounds.
 
 # Run until the next call
 
-**Slide 31 — Run until the next call**
+**Slide 33 — Run until the next call**
 
 This routine is an effectful program: the prefix's samples, memory operations,
 and other calls happen when it runs, not while constructing the compiler.
@@ -781,7 +919,7 @@ fails. This is the conceptual monad picture, not a literal implementation.
 
 # Our compiler
 
-**Slide 32 — Our compiler**
+**Slide 34 — Our compiler**
 
 Compile returns program data. The inline match runs Next when that program
 runs, including the ordinary prefix effects. At a query, execute one
@@ -791,7 +929,7 @@ still assuming serializable continuations and ignoring failures.
 
 # Main result, revisited
 
-**Slide 33 — Main result, revisited (two stages)**
+**Slide 35 — Main result, revisited (two stages)**
 
 This slide is drafted in `slides/main-result-recap.tex` and stays after the
 technical section as that section grows.
@@ -846,7 +984,7 @@ and the existing square-root composition principle.
 
 # Future directions
 
-**Slide 34 — Future directions**
+**Slide 36 — Future directions**
 
 The two bullets give the next steps: instantiate the underlying IND-CPA
 scheme with CKKS, and address the heuristics used in its analysis.
@@ -860,6 +998,6 @@ on heuristics that need precise statements before formalization.
 
 # Closing
 
-**Slide 35 — Thank you!**
+**Slide 37 — Thank you!**
 
 Open the floor for questions.

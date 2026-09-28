@@ -6,19 +6,18 @@
   \]
   \uncover<2->{%
     For every initial pair $(\rho_L,\rho_R)$ satisfying $\mathsf{Pre}$:\par
-  }
-  \begin{align*}
-    \uncover<3->{%
-      \exists\pi\in\mathsf{Coupl}\bigl(
-        [\![c_L]\!](\rho_L),[\![c_R]\!](\rho_R)\bigr)
-    }
-    \\[0.5em]
-    \uncover<4->{%
-      \Pr_{(o_L,o_R)\sim\pi}
-        [\mathsf{Post}(o_L,o_R)]\geq1-\varepsilon.
-    }
-  \end{align*}
-  \uncover<5->{%
+    \vspace{0.4em}
+    {\centering
+      $\displaystyle
+        \exists\pi\in\mathsf{Coupl}\bigl(
+          [\![c_L]\!](\rho_L),[\![c_R]\!](\rho_R)\bigr)$\par
+      \vspace{0.5em}
+      $\displaystyle
+        \Pr_{(o_L,o_R)\sim\pi}
+          [\mathsf{Post}(o_L,o_R)]\geq1-\varepsilon.$\par
+    }%
+  }%
+  \uncover<3->{%
     \vspace{0.5em}
     \takeaway{Equality postcondition $o_L=o_R$:
       $\bigl\|[\![c_L]\!](\rho_L)-[\![c_R]\!](\rho_R)\bigr\|_1\leq2\varepsilon$.}
