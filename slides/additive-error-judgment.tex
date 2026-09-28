@@ -1,11 +1,11 @@
 % Full-mass specialization of additiveErrorJudgment, ProgramLogics/Ae.v:57-69.
 \begin{frame}{Relational judgments: additive error}
   \[
-    \vDash_{\mathsf{AE}}\{\mathsf{Pre}\}\;
-      c_L\approx_{\varepsilon}c_R\;\{\mathsf{Post}\}
+    \vDash_{\mathsf{AE}}\{\varphi\}\;
+      c_L\approx_{\varepsilon}c_R\;\{\psi\}
   \]
   \uncover<2->{%
-    For every initial pair $(\rho_L,\rho_R)$ satisfying $\mathsf{Pre}$:\par
+    For every initial pair $(\rho_L,\rho_R)$ satisfying $\varphi$:\par
     \vspace{0.4em}
     {\centering
       $\displaystyle
@@ -14,7 +14,7 @@
       \vspace{0.5em}
       $\displaystyle
         \Pr_{(o_L,o_R)\sim\pi}
-          [\mathsf{Post}(o_L,o_R)]\geq1-\varepsilon.$\par
+          [\psi(o_L,o_R)]\geq1-\varepsilon.$\par
     }%
   }%
   \uncover<3->{%

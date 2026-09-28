@@ -1,14 +1,14 @@
 \begin{frame}{Sequencing: Hoare logic}
   \[
     \inferrule*{
-      \vDash_{\mathsf{Hoare}}\{\mathsf{Pre}\}\;c\;
-        \{\textcolor{MendingTeal}{\mathsf{Mid}}\}
+      \vDash_{\mathsf{Hoare}}\{\varphi\}\;c\;
+        \{\textcolor{MendingTeal}{\theta}\}
       \\
-      \vDash_{\mathsf{Hoare}}\{\textcolor{MendingTeal}{\mathsf{Mid}}\}\;
-        k\;\{\mathsf{Post}\}
+      \vDash_{\mathsf{Hoare}}\{\textcolor{MendingTeal}{\theta}\}\;
+        k\;\{\psi\}
     }{
-      \vDash_{\mathsf{Hoare}}\{\mathsf{Pre}\}\;
-        (y\leftarrow c;\;k(y))\;\{\mathsf{Post}\}
+      \vDash_{\mathsf{Hoare}}\{\varphi\}\;
+        (y\leftarrow c;\;k(y))\;\{\psi\}
     }
   \]
 \end{frame}

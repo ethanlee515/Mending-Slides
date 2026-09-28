@@ -2,17 +2,17 @@
 \begin{frame}{Sequencing: additive error}
   \[
     \inferrule*{
-        \vDash_{\mathsf{AE}}\{\mathsf{Pre}\}\;
+        \vDash_{\mathsf{AE}}\{\varphi\}\;
           c_L\approx_{\varepsilon_1}c_R\;
-          \{\textcolor{MendingTeal}{\mathsf{Mid}}\}
+          \{\textcolor{MendingTeal}{\theta}\}
       \\
-        \vDash_{\mathsf{AE}}\{\textcolor{MendingTeal}{\mathsf{Mid}}\}\;
-          k_L\approx_{\varepsilon_2}k_R\;\{\mathsf{Post}\}
+        \vDash_{\mathsf{AE}}\{\textcolor{MendingTeal}{\theta}\}\;
+          k_L\approx_{\varepsilon_2}k_R\;\{\psi\}
     }{
-      \vDash_{\mathsf{AE}}\{\mathsf{Pre}\}\;
+      \vDash_{\mathsf{AE}}\{\varphi\}\;
         (y_L\leftarrow c_L;\;k_L(y_L))
         \approx_{\textcolor{MendingCoral}{\varepsilon_1+\varepsilon_2}}
-        (y_R\leftarrow c_R;\;k_R(y_R))\;\{\mathsf{Post}\}
+        (y_R\leftarrow c_R;\;k_R(y_R))\;\{\psi\}
     }
   \]
 \end{frame}

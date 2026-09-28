@@ -2,17 +2,17 @@
 \begin{frame}{Sequencing: Pythagorean}
   \[
     \inferrule*{
-        \vDash_{\mathsf{Pyth}}\{\mathsf{Pre}\}\;
+        \vDash_{\mathsf{Pyth}}\{\varphi\}\;
           c_L\approx_s c_R\;
-          \{\textcolor{MendingTeal}{\mathsf{Mid}}\}
+          \{\textcolor{MendingTeal}{\theta}\}
       \\
-        \vDash_{\mathsf{Pyth}}\{\textcolor{MendingTeal}{\mathsf{Mid}^{=}}\}\;
-          k_L\approx_t k_R\;\{\mathsf{Post}\}
+        \vDash_{\mathsf{Pyth}}\{\textcolor{MendingTeal}{\theta^{=}}\}\;
+          k_L\approx_t k_R\;\{\psi\}
     }{
-      \vDash_{\mathsf{Pyth}}\{\mathsf{Pre}\}\;
+      \vDash_{\mathsf{Pyth}}\{\varphi\}\;
         (y_L\leftarrow c_L;\;k_L(y_L))
         \approx_{\textcolor{MendingCoral}{s\mathbin{+\!\!+}t}}
-        (y_R\leftarrow c_R;\;k_R(y_R))\;\{\mathsf{Post}\}
+        (y_R\leftarrow c_R;\;k_R(y_R))\;\{\psi\}
     }
   \]
 \end{frame}

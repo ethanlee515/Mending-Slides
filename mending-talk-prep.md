@@ -615,7 +615,11 @@ too.
 Introduce the general Hoare judgment first; pause before revealing the `roll`
 example. Package the previous walkthrough as one claim. The first braces give the
 starting condition, the second the guarantee about the return value and final
-memory. `true` means no restriction on initial memory. Read the turnstile as
+memory. Introduce `φ` (\varphi) as the precondition and `ψ` as the
+postcondition: they are Boolean predicates/formulas, not program variables.
+The sequencing slides use `θ` for the intermediate condition. Keep `P_i`
+and `Q_i` for transcript distributions; there is no need to rename them.
+`true` means no restriction on initial memory. Read the turnstile as
 “the judgment holds”; these are mathematical propositions, not runtime checks.
 
 For `roll`, all samples are positive and it does not fail. In the repository,
@@ -629,11 +633,11 @@ off-slide unless asked.
 
 The rule uses the paper’s `mathpartir` / `inferrule` layout, without a rule
 label. Read it from top to bottom: prove the two premises to obtain the
-conclusion below the bar. `Mid` is the interface between the proofs: the
+conclusion below the bar. `θ` is the interface between the proofs: the
 first part establishes exactly the condition the continuation needs.
 `y ← c; k(y)` samples the result of `c` and feeds it to `k`, carrying memory
 through too. The second premise holds for every intermediate value/memory
-satisfying `Mid`. Input arguments are suppressed in this schematic notation.
+satisfying `θ`. Input arguments are suppressed in this schematic notation.
 Connect this to keeping `a > 0` while sampling `b` in our walkthrough.
 
 # Crypto Analysis: Data Processing Inequality
@@ -714,10 +718,10 @@ answer distributions.
 **Slide 25 — Sequencing: additive error**
 
 Use the paper’s `inferrule` layout without a rule label or takeaway box.
-Same structure, now comparing two executions. `Mid` relates the intermediate
+Same structure, now comparing two executions. `θ` relates the intermediate
 values and memories, so the continuation proofs apply to the coupled outputs.
-The first coupling can miss `Mid` with probability at most `ε₁`; when `Mid`
-holds, the continuation coupling can miss `Post` with probability at most
+The first coupling can miss `θ` with probability at most `ε₁`; when `θ`
+holds, the continuation coupling can miss `ψ` with probability at most
 `ε₂`. Combining the couplings gives error at most `ε₁ + ε₂`.
 
 Keep the full-mass/no-failure picture from the AE introduction. The actual
@@ -767,8 +771,8 @@ vector instead of being immediately converted to a distance. The slide omits
 the nonnegative-budget and nonempty-transcript side conditions; the paper
 and Rocq definition give the precise statement.
 
-Unlike AE’s relational postcondition, `Post` here is a common unary invariant:
-it holds on every successful output of either program. `Pre` still relates
+Unlike AE’s relational postcondition, `ψ` here is a common unary invariant:
+it holds on every successful output of either program. `φ` still relates
 the two initial configurations. This invariant supplies facts needed by later
 program fragments. Explain that difference briefly rather than implying the
 two judgments have identical postcondition types.
@@ -782,7 +786,7 @@ These transcripts are mathematical witnesses, not necessarily the literal
 list of syntactic sampling sites. A whole fragment can occupy one coordinate;
 the sequence rule will concatenate witnesses. We retain the no-failure picture
 here. The formal definition uses completed, encoded output/heap states and
-checks `Post` on the support of successful outputs.
+checks `ψ` on the support of successful outputs.
 
 Reveal the judgment/cost vector first, then the initial-pair condition,
 transcript witnesses, and final-marginal identities together. Reveal the
@@ -800,7 +804,7 @@ We are expressing the required hypotheses, not assuming a new trusted rule.
 
 The slide uses an unlabeled `inferrule`; its title names the rule.
 This is what the new judgment buys us: the probability lemma bounds the final
-output distance, and maximal coupling gives an AE equality judgment. `Post`
+output distance, and maximal coupling gives an AE equality judgment. `ψ`
 is the common invariant from Pyth; the conclusion guarantees equality except
 with probability at most `sqrt(||s||₁/2)`.
 
@@ -816,10 +820,10 @@ at every step? Show the main sequencing rule.
 **Slide 29 — Sequencing: Pythagorean**
 
 Use the familiar two-premise `inferrule` shape without a rule label or
-takeaway box. Keep the symbols in the rule; explain `Mid⁼` and `++` aloud
+takeaway box. Keep the symbols in the rule; explain `θ⁼` and `++` aloud
 instead of displaying their definitions below it.
 The intermediate postcondition here is a
-common unary invariant. `Mid⁼` in the continuation premise requires identical
+common unary invariant. `θ⁼` in the continuation premise requires identical
 intermediate values and memory satisfying that invariant. This is not a claim
 that the two prefix runs necessarily produce equal outputs: the continuation
 comparison is required for each common history, as in the conditional KL lemma.
