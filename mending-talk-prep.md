@@ -51,11 +51,45 @@ AI can help produce a proof, but the checker supplies the evidence, not the AI.
 
 Soundness is relative to the stated assumptions and the trusted checker.
 
-Transition: now introduce the cryptographic problem whose proof we checked.
+Transition: briefly introduce SSProve as the Rocq library we use for
+cryptographic proofs, then introduce the cryptographic problem.
+
+# SSProve
+
+**Slide 6 — SSProve**
+
+SSProve is a Rocq library for machine-checked cryptographic proofs. Briefly
+introduce Rocq as another proof assistant, in the same family as Lean. Its
+original paper received a CSF 2021 **Distinguished Paper Award**; use that
+name rather than “best paper.” Rocq was called Coq when the paper appeared.
+
+Introduce the building blocks as a preview; the audience has not yet seen
+the cloud example or the main result. A cryptographic game is
+an experiment that runs the scheme and adversary and decides whether the
+adversary wins. SSProve also provides a formal notion of adversary and
+the probability that it wins the game. An oracle is an interface the
+adversary can call, such as a service that decrypts a ciphertext. Private
+memory and access restrictions model which
+component can read a key or modify a table. Packages collect callable
+operations; linking connects components through their interfaces. These
+are reusable infrastructure rather than our contribution.
+
+Keep this introduction at the level of what the library supplies, without
+assuming cryptography background. We will motivate the specific problem
+next and return to why we chose SSProve after the result and formalization
+overview. Its program representation belongs in the later technical story.
+Budget about one minute.
+
+Transition: “This is the library we use to check cryptographic proofs.
+Now let’s look at the cryptographic problem we wanted to solve.”
+
+Sources: [SSProve repository and documentation](https://github.com/SSProve/ssprove),
+[original paper](https://eprint.iacr.org/2021/397), and
+[CSF award list](https://www.ieee-security.org/CSFWweb/distinguished.html).
 
 # Fully Homomorphic Encryptions
 
-**Slide 6 — Fully Homomorphic Encryptions**
+**Slide 7 — Fully Homomorphic Encryptions**
 
 - Fully homomorphic encryption (FHE) lets a server compute on encrypted data
   without holding the decryption key. The client encrypts the input and
@@ -94,7 +128,7 @@ Continue with the diagram on the same slide:
 
 # FHE in cloud computing
 
-**Slide 7 — FHE in cloud computing (seven stages)**
+**Slide 8 — FHE in cloud computing (seven stages)**
 
 Walk through the messages.
 Reinforce that the server does the computation while the client holds `k`.
@@ -104,7 +138,7 @@ first message to the server.
 
 # FHE timeline
 
-**Slide 8 — FHE timeline**
+**Slide 9 — FHE timeline**
 
 - The FHE question goes back to 1978; Gentry’s first construction appeared in
   2009. The 2011–2012 generation of constructions made major efficiency gains.
@@ -120,7 +154,7 @@ with the 2022 marker reserved for the LMSS defense.
 
 # The LM Attack
 
-**Slide 9 — The LM Attack (four stages; one round)**
+**Slide 10 — The LM Attack (four stages; one round)**
 
 1. Start with the client/server setting. The attacker knows the original
    plaintext `x` and the function `f` and can observe the ciphertext traffic.
@@ -148,7 +182,7 @@ Sources: [Li–Micciancio, EUROCRYPT 2021](https://eprint.iacr.org/2020/1533);
 
 # The LMSS patch
 
-**Slide 10 — The LMSS patch**
+**Slide 11 — The LMSS patch**
 
 - LMSS = Li, Micciancio, Schultz, and Sorrell. Their defense postprocesses
   approximate decryption with fresh Gaussian noise.
@@ -170,7 +204,7 @@ Source: [LMSS, CRYPTO 2022](https://eprint.iacr.org/2022/816).
 
 # LMSS intuition
 
-**Slide 11 — LMSS intuition**
+**Slide 12 — LMSS intuition**
 
 - Reveal the displayed decomposition one line at a time. The intermediate
   `y` is the approximate decrypted answer from the previous slide;
@@ -231,7 +265,7 @@ or become a backup slide.
 
 # Main result
 
-**Slide 12 — Main result (two stages)**
+**Slide 13 — Main result (two stages)**
 
 1. The centered card says: “We formally verified the LMSS security reduction
    using Rocq/SSProve.” Give the headline before starting the technical part.
@@ -255,7 +289,7 @@ tail that stops outside the card. Adapted in `diagrams/results.tex`.
 
 # Formalization details
 
-**Slide 13 — Formalization details (three stages)**
+**Slide 14 — Formalization details (three stages)**
 
 The story is what a reader needs to trust and inspect to be convinced by the
 checked LMSS reduction. Reveal the trusted computing base first, then the
@@ -344,8 +378,8 @@ Implementation/reproducibility details, if asked (off-slide):
   parallel jobs; this is a single reproduction observation, not a performance
   claim. The manuscript refreshes its Rocq excerpts from checked sources.
 
-Transition: “Before unpacking the program logic and compiler, let me
-briefly introduce SSProve and why we chose it.”
+Transition: “Earlier I introduced SSProve. Before unpacking the program
+logic and compiler, here is why we chose it for this project.”
 
 Sources: `../mending/Pythagorean-RHL/mechanization-and-trusted-base.tex`
 (“Trusted computing base” and the final audit-surface paragraph),
@@ -354,41 +388,13 @@ Sources: `../mending/Pythagorean-RHL/mechanization-and-trusted-base.tex`
 These facts describe the paper’s pinned artifact, not today’s latest library
 versions.
 
-# What is SSProve?
-
-**Slide 14 — What is SSProve?**
-
-SSProve is a Rocq library for machine-checked cryptographic proofs. Its
-original paper received a CSF 2021 **Distinguished Paper Award**; use that
-name rather than “best paper.” Rocq was called Coq when the paper appeared.
-
-Connect the building blocks to the cloud example. A cryptographic game is
-an experiment that runs the scheme and adversary and decides whether the
-adversary wins. SSProve also provides a formal notion of adversary and
-the probability that it wins the game. Connect this to the winning
-probabilities on the main-result slide: these are probabilities of events
-in the game semantics. An oracle is an interface the adversary can call, such as
-the decryption service. Private memory and access restrictions model which
-component can read a key or modify a table. Packages collect callable
-operations; linking connects components through their interfaces. These
-are reusable infrastructure rather than our contribution.
-
-Keep this introduction at the level of what the library supplies. We will
-explain how it represents programs after this brief framework aside.
-Budget about one minute.
-
-Transition: “Why did we choose this framework for the noise-flooding proof?”
-
-Sources: [SSProve repository and documentation](https://github.com/SSProve/ssprove),
-[original paper](https://eprint.iacr.org/2021/397), and
-[CSF award list](https://www.ieee-security.org/CSFWweb/distinguished.html).
-
 # Why SSProve?
 
 **Slide 15 — Why SSProve? (three stages)**
 
-Keep this as a brief continuation of the SSProve introduction, before
-the program-language story begins. Reveal the three columns from left to
+Return to the SSProve introduction from slide 6, now that the audience has
+seen the application, main result, and formalization details. Keep this
+aside brief before the program-language story begins. Reveal the three columns from left to
 right, keeping their positions fixed. Each column has two levels: a concrete
 heading and short supporting cues. Keep the EasyCrypt comparison spoken;
 the slide ends with the three columns. Budget about one minute.
