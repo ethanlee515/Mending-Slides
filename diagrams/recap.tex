@@ -17,10 +17,10 @@
     \node[recap value] (c) at (0,0) {$\hat{x}$};
     \node[recap value] (cf) at (3.7,0) {$\hat{y}$};
     \draw[recap flow] (x) -- node[recap label,above] {$f$} (y);
-    \draw[recap flow] (x) -- node[recap label,left] {$\operatorname{Enc}_{k}$} (c);
+    \draw[recap flow] (x) -- node[recap label,left] {$\operatorname{Enc}$} (c);
     \draw[recap flow] (c) -- node[recap label,below] {$\operatorname{Eval}(f,\cdot)$} (cf);
     \draw[recap flow] (cf) -- node[recap label,right]
-      {$\operatorname{Dec}_{k}$} (y);
+      {$\operatorname{Dec}$} (y);
   \end{tikzpicture}%
 }
 

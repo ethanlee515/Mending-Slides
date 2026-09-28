@@ -868,8 +868,9 @@ inside a judgment for SSProve programs.
 
 The judgment packages the hypotheses of the probability lemma as a property
 of two programs. The final transcript marginals are the actual program
-outputs. Each coordinate has a conditional KL budget; these costs remain a
-vector instead of being immediately converted to a distance. The slide omits
+outputs. The arrow in `vec{s}` marks a vector of conditional KL budgets;
+`s_i` is its i-th item, the budget for coordinate `i`. These costs remain a vector
+instead of being immediately converted to a distance. The slide omits
 the nonnegative-budget and nonempty-transcript side conditions; the paper
 and Rocq definition give the precise statement.
 
@@ -908,11 +909,11 @@ The slide uses an unlabeled `inferrule`; its title names the rule.
 This is what the new judgment buys us: the probability lemma bounds the final
 output distance, and maximal coupling gives an AE equality judgment. `ψ`
 is the common invariant from Pyth; the conclusion guarantees equality except
-with probability at most `sqrt(||s||₁/2)`.
+with probability at most `sqrt(||vec{s}||₁/2)`.
 
 This error is a disagreement probability, so the constant is still `/2` even
 though the previous probability slide displays L1 distance. The equivalent
-L1 bound is `sqrt(2||s||₁)`. No normalization change to the AE judgment.
+L1 bound is `sqrt(2||vec{s}||₁)`. No normalization change to the AE judgment.
 
 Next: how do we build the vector of KL budgets without paying a square root
 at every step? Show the main sequencing rule.
@@ -930,7 +931,8 @@ intermediate values and memory satisfying that invariant. This is not a claim
 that the two prefix runs necessarily produce equal outputs: the continuation
 comparison is required for each common history, as in the conditional KL lemma.
 
-`++` concatenates the witness transcripts and their KL budget vectors. We do
+`++` concatenates the witness transcripts and their KL budget vectors
+`vec{s}` and `vec{t}`. We do
 not add square roots during composition. After composing all fragments,
 Micciancio–Walter converts the sum of KL costs once to an AE error.
 
@@ -950,7 +952,8 @@ around its decryption calls, use Pyth sequencing to accumulate one KL budget
 per call and treat unchanged surrounding code as zero-cost. First show the
 round decomposition, then reveal the Pyth judgment and its vector, including
 the zero-cost fragments. Finally reveal the pink `raw_code` callout.
-Its norm is `qε`; MW then gives AE error `sqrt(qε/2)`, which can be recalled
+The vector is `vec{s} = (0, ε, 0, ..., ε, 0)`; each `ε` is a scalar
+one-call KL budget. Its norm is `qε`; MW then gives AE error `sqrt(qε/2)`, which can be recalled
 in words instead of displaying another judgment here.
 The `A_i` are adaptive continuations depending on prior answers, not fixed
 independent computations. The notation is schematic; assume the common

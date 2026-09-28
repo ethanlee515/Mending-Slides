@@ -35,11 +35,11 @@
     \node[proofname,below=0.18cm of html] {proof.html};
     \ifnum#1=1\relax
       \node[badproof,callout absolute pointer={($(tex.north)+(0,0.03)$)}]
-        at (-3.25,2.72) {$0=1$};
+        at ($(tex.center)+(-0.4,1.37)$) {$0=1$};
       \node[badproof,callout absolute pointer={($(pdf.north)+(0,0.03)$)}]
-        at (1.65,2.72) {$0=1$};
+        at ($(pdf.center)+(-0.4,1.37)$) {$0=1$};
       \node[badproof,callout absolute pointer={($(rocq.north)+(0,0.03)$)}]
-        at (-3.25,-0.58) {$0=1$};
+        at ($(rocq.center)+(-0.4,1.37)$) {$0=1$};
       \draw[MendingCoral,line width=2pt]
         ($(html.south west)+(-0.08,-0.08)$) -- ($(html.north east)+(0.08,0.08)$)
         ($(html.north west)+(-0.08,0.08)$) -- ($(html.south east)+(0.08,-0.08)$);

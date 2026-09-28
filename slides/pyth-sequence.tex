@@ -3,15 +3,15 @@
   \[
     \inferrule*{
         \vDash_{\mathsf{Pyth}}\{\varphi\}\;
-          c_L\approx_s c_R\;
+          c_L\approx_{\vec{s}} c_R\;
           \{\textcolor{MendingTeal}{\theta}\}
       \\
         \vDash_{\mathsf{Pyth}}\{\textcolor{MendingTeal}{\theta^{=}}\}\;
-          k_L\approx_t k_R\;\{\psi\}
+          k_L\approx_{\vec{t}} k_R\;\{\psi\}
     }{
       \vDash_{\mathsf{Pyth}}\{\varphi\}\;
         (y_L\leftarrow c_L;\;k_L(y_L))
-        \approx_{\textcolor{MendingCoral}{s\mathbin{+\!\!+}t}}
+        \approx_{\textcolor{MendingCoral}{\vec{s}\mathbin{+\!\!+}\vec{t}}}
         (y_R\leftarrow c_R;\;k_R(y_R))\;\{\psi\}
     }
   \]
