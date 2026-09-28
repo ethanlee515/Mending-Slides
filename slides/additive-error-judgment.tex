@@ -3,28 +3,24 @@
   \[
     \vDash_{\mathsf{AE}}\{\mathsf{Pre}\}\;
       c_L\approx_{\varepsilon}c_R\;\{\mathsf{Post}\}
-      \qquad(\varepsilon\geq0)
   \]
-  \medskip
   \uncover<2->{%
     For every initial pair $(\rho_L,\rho_R)$ satisfying $\mathsf{Pre}$:\par
   }
-  \uncover<3->{%
-    \medskip
-    {\small $\mu_i=[\![c_i]\!](\rho_i)$:
-      outputs and final memory.\par}
-  }
-  \uncover<4->{%
-    \[
-      \exists\pi\in\mathsf{Coupl}(\mu_L,\mu_R),\qquad
+  \begin{align*}
+    \uncover<3->{%
+      \exists\pi\in\mathsf{Coupl}\bigl(
+        [\![c_L]\!](\rho_L),[\![c_R]\!](\rho_R)\bigr)
+    }
+    \\[0.5em]
+    \uncover<4->{%
       \Pr_{(o_L,o_R)\sim\pi}
         [\mathsf{Post}(o_L,o_R)]\geq1-\varepsilon.
-    \]
-    {\small Coupling: a joint distribution with the correct marginals.\par}
-  }
+    }
+  \end{align*}
   \uncover<5->{%
-    \vspace{1em}
+    \vspace{0.5em}
     \takeaway{Equality postcondition $o_L=o_R$:
-      $\|\mu_L-\mu_R\|_1\leq2\varepsilon$.}
+      $\bigl\|[\![c_L]\!](\rho_L)-[\![c_R]\!](\rho_R)\bigr\|_1\leq2\varepsilon$.}
   }
 \end{frame}

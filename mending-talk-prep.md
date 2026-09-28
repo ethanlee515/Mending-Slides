@@ -18,7 +18,8 @@ aloud using these notes. Assume no cryptography background.
 
 - This is a cryptography and programming-languages talk, rather than a quantum
   algorithms talk. The connection to the group is the verification work.
-- Introduce the collaboration using the authors and affiliations on the slide.
+- Introduce the collaboration aloud. Author superscript 1 refers to the left
+  emblem (Maryland); superscript 2 refers to the right emblem (Edinburgh).
 - Some of this introduction will look familiar from last year. We will review
   the cryptographic problem before explaining what is now machine checked.
 
@@ -88,10 +89,8 @@ Continue with the diagram on the same slide:
 - The diagram’s lower route is `x → hat{x} → hat{y} → y`. The upper route applies
   `f` directly. Walk through these two routes rather than display another
   three-line definition of the same computation.
-- Exact FHE recovers the intended plaintext result. In approximate FHE, such as
-  CKKS, we allow a bounded numerical error: `y ≈ f(x)`. Say this aloud; the
-  diagram intentionally does not repeat “approximately” on the decryption
-  arrow.
+- This slide introduces general FHE: the two routes recover the same result.
+  Save approximate FHE and numerical error for the timeline and LM attack.
 
 **Slide 7 — Recap: FHE, what? — Cloud computing (seven stages)**
 
@@ -503,7 +502,9 @@ Connect this to keeping `a > 0` while sampling `b` in our walkthrough.
 
 # Background: Program logic warm-up
 
-**Slide 21 — Crypto Analysis: Data Processing Inequality**
+**Slide 21 — Crypto Analysis: Data Processing Inequality (two stages)**
+
+Explain the theorem first; then reveal the question about programs.
 
 Composition means: sample `y` from `D(x)`, then sample the output from `P(y)`.
 The result is a mixture over the intermediate value, not ordinary composition
@@ -532,9 +533,12 @@ we can prove them one program fragment at a time.
 
 **Slide 22 — Relational judgments: additive error (five stages)**
 
-Reveal the judgment first, then the initial pair, then the semantic output
-distributions, then the coupling guarantee, and finally the equality-distance
-consequence. Pause to explain each piece before advancing.
+Reveal the judgment first, then the initial pair, then the coupling of the
+inline program semantics, then its probability guarantee, and finally the
+equality-distance consequence. Explain a coupling and the output/final-memory
+semantics aloud; the slide has no separate `mu` notation. Pause to explain
+each piece before advancing. Budget sign constraints are omitted from this
+schematic picture.
 
 We used assertions about one program. Now the precondition relates two initial
 inputs/memories and the postcondition relates two final outcomes. A coupling
@@ -592,7 +596,9 @@ the end instead.
 
 # Pythagorean preservation
 
-**Slide 24 — FHE Analysis: Pythagorean Preservation**
+**Slide 24 — FHE Analysis: Pythagorean Preservation (two stages)**
+
+Explain the lemma first; then reveal the question about program logic.
 
 Read the coordinates as steps in a transcript, and `a` as the entire history
 before the current step. Both distributions are conditioned on the same
@@ -621,13 +627,20 @@ inside a judgment for SSProve programs.
 The judgment packages the hypotheses of the probability lemma as a property
 of two programs. The final transcript marginals are the actual program
 outputs. Each coordinate has a conditional KL budget; these costs remain a
-vector instead of being immediately converted to a distance.
+vector instead of being immediately converted to a distance. The slide omits
+the nonnegative-budget and nonempty-transcript side conditions; the paper
+and Rocq definition give the precise statement.
 
 Unlike AE’s relational postcondition, `Post` here is a common unary invariant:
 it holds on every successful output of either program. `Pre` still relates
 the two initial configurations. This invariant supplies facts needed by later
 program fragments. Explain that difference briefly rather than implying the
 two judgments have identical postcondition types.
+
+The indexed families `P = {P_i}` and `Q = {Q_i}` are shorthand for the
+coordinates of joint transcript witnesses. They retain order and dependence;
+we are not choosing independent marginal distributions. `P_n` and `Q_n`
+denote their final marginals.
 
 These transcripts are mathematical witnesses, not necessarily the literal
 list of syntactic sampling sites. A whole fragment can occupy one coordinate;
