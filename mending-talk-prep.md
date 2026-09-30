@@ -425,7 +425,7 @@ than counting their transitive library implementation. This is a measured specif
 not a claim that all foundations require only 724 lines of inspection.
 Running-time analysis inspects the counted reduction and its primitives;
 it is not an additional source-line category.
-The Open Source block shows roughly 29k lines of Rocq (27,987 in the
+The Open Source block shows roughly 27k lines of Rocq (27,987 in the
 manuscript) before the 724-line audit table appears. Artifact size is
 separate implementation context, not the audit-surface count.
 
