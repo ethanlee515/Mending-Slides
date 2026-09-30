@@ -1,25 +1,41 @@
 \begin{frame}{What is a program?}
   \begin{columns}[T,onlytextwidth]
-    \column{0.18\textwidth}
+    \column{0.16\textwidth}
       \uncover<1->{%
       \textbf{A string?}\par\medskip
       {\small Plain text file, e.g.\ \texttt{.py}.\par}
       }%
-    \column{0.49\textwidth}
+    \column{0.48\textwidth}
       \uncover<2->{%
       \textbf{A function?}\par\medskip
-      {\small\texttt{def f(x: X) -> Y}\par}
-      \medskip
+      {\small\mbox{\texttt{def f(x: X) -> Y}}\par}
+      \vspace{0.9em}
       {\small
-        $\quad\mapsto\;\mathsf{Fun}\bigl(X\times\mathsf{Mem},\,
-          \mathsf{distr}(Y\times\mathsf{Mem})\bigr)$\par
+        \hspace*{1em}\begin{tikzpicture}[baseline=(naive.base)]
+          \node[inner sep=0pt] (naive) {$\mapsto\;\mathsf{Fun}(X,Y)$};
+          \only<3->{%
+            \draw[MendingCoral,line width=1pt]
+              ($(naive.north west)+(-0.02,0.03)$) --
+              ($(naive.south east)+(0.02,-0.03)$);
+            \draw[MendingCoral,line width=1pt]
+              ($(naive.south west)+(-0.02,-0.03)$) --
+              ($(naive.north east)+(0.02,0.03)$);
+          }
+        \end{tikzpicture}\par
       }
-      }%
-    \column{0.27\textwidth}
       \uncover<3->{%
+        \vspace{0.9em}
+        {\small
+          $\quad\mapsto\;\mathsf{Fun}\bigl(X\times\mathsf{Mem},\,
+            \mathsf{distr}(Y\times\mathsf{Mem})\bigr)$\par
+        }
+      }%
+      }%
+    \column{0.30\textwidth}
+      \uncover<4->{%
       \textbf{A tree?}\par\medskip
-      {\small Abstract syntax tree.\par
-        \medskip Remember compilers class?\par}
+      {\small Abstract syntax tree.\par}
+      \uncover<5->{\medskip{\small Remember compiler class?\par}}%
       }%
   \end{columns}
 \end{frame}
