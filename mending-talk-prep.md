@@ -527,7 +527,7 @@ semantics here.
 
 # Abstract syntax trees
 
-**Slide 17 — Abstract syntax trees**
+**Slide 17 — Abstract syntax trees (two stages)**
 
 Use the function body from the preceding example, with `r = a + b; return r`.
 The initial `a = b = -1` belongs to its starting state. `r` is a local return
@@ -539,8 +539,9 @@ This is a schematic AST of the Python example, not SSProve’s exact code type:
 SSProve represents effects with continuations and leaves pure computations
 inside Rocq. That detail belongs on the next slide.
 
-The box encloses the whole program. The arrow interprets that whole syntax
-tree. Its meaning is a function from initial memory to a distribution over
+First show only the boxed syntax tree and let the audience identify the
+AST. On the next click, reveal the interpretation arrow and boxed semantics.
+The arrow interprets the whole syntax tree. Its meaning is a function from initial memory to a distribution over
 the returned value and final memory. In our example the initial memory has
 `(a,b) = (-1,-1)`; `Mem` must allow these negative initial values. The
 returned sum is a natural number. The displayed formula applies the semantics
